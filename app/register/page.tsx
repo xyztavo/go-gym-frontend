@@ -41,45 +41,52 @@ export default function ProfileForm() {
       name: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await axios.post("http://localhost:8000/users", {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    });
-
-    const authToken = res.data.token;
-
-    if (res.status == 201) {
-      toast({
-        title: "user created with ease!",
+ 
+  async function OnSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await axios.post("http://localhost:8000/users", {
+        name: values.name,
+        email: values.email,
+        password: values.password,
       });
-    } else {
-        toast({
+      const authToken = res.data.token;
+      setCookie("auth", authToken);
+      toast({ title: "User created with ease!" });
+      router.push("/user");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        // Handle known errors returned by the server
+        const statusCode = error.response.status;
+        if (statusCode == 500) {
+          toast({
             variant: "destructive",
-            title:"user already exists, email already in use"
-        })
+            title: `Either server down or user already exists`,
+          });
+        }
+      } else {
+        // Handle other types of errors (like network errors)
+        toast({
+          variant: "destructive",
+          title: "An unexpected error occurred.",
+        });
+      }
     }
-    router.push("/user");
-    setCookie("auth", authToken);
   }
   return (
     <div className="flex flex-col justify-center items-center my-4">
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="gustavo" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>Your Full Name</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -93,9 +100,7 @@ export default function ProfileForm() {
                   <FormControl>
                     <Input placeholder="email@email.com" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>Your email</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -109,9 +114,7 @@ export default function ProfileForm() {
                   <FormControl>
                     <Input placeholder="password" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>Pick a strong password</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
