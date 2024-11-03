@@ -1,11 +1,13 @@
+"use client"
+import { baseUrlRoute } from "@/api/lib/routes";
 import { toast } from "@/hooks/use-toast";
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useSWR from "swr";
 
-export const withProtectedRoute = <P extends object>(WrappedComponent: React.ComponentType<P>) => {
+export const withAdminProtectedRoute = <P extends object>(WrappedComponent: React.ComponentType<P>) => {
     const ProtectedRoute: React.FC<P> = (props) => {
       const router = useRouter();
       const authToken = getCookie("auth");
@@ -13,12 +15,12 @@ export const withProtectedRoute = <P extends object>(WrappedComponent: React.Com
       const { data, isLoading, error } = useSWR(
         authToken ? "/admin/testauth" : null,
         async () => {
-          const res = await axios.get("http://localhost:8000/admin/testauth", {
+          const res = await baseUrlRoute.get("/admin/testauth", {
             headers: { Authorization: `Bearer ${authToken}` },
           });
           return res.data;
         }
-      );
+      , { revalidateOnFocus: false});
   
       useEffect(() => {
         if (error) {

@@ -19,6 +19,9 @@ import axios from "axios";
 import { setCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { baseUrlRoute } from "@/api/lib/routes";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(5, {
@@ -33,6 +36,7 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,10 +45,11 @@ export default function ProfileForm() {
       name: "",
     },
   });
- 
+
   async function OnSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true)
     try {
-      const res = await axios.post("http://localhost:8000/users", {
+      const res = await baseUrlRoute.post("/users", {
         name: values.name,
         email: values.email,
         password: values.password,
@@ -53,8 +58,11 @@ export default function ProfileForm() {
       setCookie("auth", authToken);
       toast({ title: "User created with ease!" });
       router.push("/user");
+      router.refresh();
+      setIsLoading(false)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
+        setIsLoading(false)
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 500) {
@@ -64,6 +72,7 @@ export default function ProfileForm() {
           });
         }
       } else {
+        setIsLoading(false)
         // Handle other types of errors (like network errors)
         toast({
           variant: "destructive",
@@ -74,6 +83,7 @@ export default function ProfileForm() {
   }
   return (
     <div className="flex flex-col justify-center items-center my-4">
+        <h1 className="text-xl font-bold">Create your account:</h1>
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
@@ -119,7 +129,7 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isLoading} className="flex flex-row items-center justify-center">{isLoading && <Loader2 className="animate-spin" />}Submit</Button>
           </form>
         </Form>
       </div>
