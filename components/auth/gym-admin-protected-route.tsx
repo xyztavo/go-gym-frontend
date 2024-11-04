@@ -6,23 +6,21 @@ import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const withAdminProtectedRoute = <P extends object>(
+export const withGymAdminProtectedRoute = <P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) => {
   const ProtectedRoute: React.FC<P> = (props) => {
-    const [data, setData] = useState("");
-    const [error, setError] = useState("");
+    const [data, setData] = useState("")
+    const [error, setError] = useState("")
     const router = useRouter();
     const authToken = getCookie("auth");
 
     useEffect(() => {
-      baseUrlRoute
-        .get("/admin/test-auth", {
-          headers: { Authorization: `Bearer ${authToken}` },
-        })
-        .then((res) => setData(res.data))
-        .catch((e) => setError(e));
-    }, []);
+      baseUrlRoute.get("/gym/admin/test-auth", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      }).then((res) => setData(res.data)).catch((e) => setError(e));
+    }, [])
+ 
     useEffect(() => {
       if (error) {
         if (isAxiosError(error) && error.response) {
