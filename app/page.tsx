@@ -93,7 +93,7 @@ export default function Page() {
                   <Notebook />
                   Plans:
                 </h1>
-                <div className="flex flex-row flex-wrap  gap-4">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-4">
                   {data.plans.map((plan, i) => (
                     <div
                       className="border border-muted p-2 rounded-md flex flex-col justify-center items-center"
@@ -117,7 +117,7 @@ export default function Page() {
                 <h1 className="text-xl font-semibold flex flex-row gap-2 items-center justify-center">
                   <Calendar /> Routines:
                 </h1>
-                <div className="flex flex-row flex-wrap  gap-4">
+                <div className="flex flex-row flex-wrap items-center justify-center gap-4">
                   {data.plans.map((routines, i) => (
                     <div
                       className="border border-muted p-2 rounded-md flex flex-col justify-center items-center"
