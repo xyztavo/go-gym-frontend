@@ -1,5 +1,5 @@
 export default function Page() {
     return (
-        <div>This is the user page</div>
+        <div>This is the user page.</div>
     )
 }

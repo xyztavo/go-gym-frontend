@@ -3,7 +3,7 @@
 - [x] log in 
 - [x] set user gym admin 
 - [x] gym admin can create gyms
-- [ ] 50% done, need to get plans and routines, in /user, GET /user/gym/details
+- [x] 50% done, need to get plans and routines, in /user, GET /user/gym/details
 - [ ] gym admins can create plans
 - [ ] admins or gym admins can create exercise
 - [ ] get exercises
