@@ -66,9 +66,11 @@ export default function Page() {
       )}
       {data && (
         <div className="flex flex-col border border-muted rounded-md items-center justify-center gap-2 my-4 md:w-1/2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={data.image}
             className="object-cover w-52 h-52 rounded-md border border-muted my-4"
+            alt={data.name + " image"}
           />
           <h1 className="text-2xl font-bold">{data.name}</h1>
           <div className="flex flex-row items-center justify-center gap-4 flex-wrap">

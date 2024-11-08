@@ -26,7 +26,7 @@ const formSchema = z.object({
   name: z
     .string()
     .min(3, {
-      message: "gym name must have at least 3 characters",
+      message: "exercise name must have at least 3 characters",
     })
     .max(40, {
       message: "40 max characters.",
@@ -34,25 +34,15 @@ const formSchema = z.object({
   description: z
     .string()
     .min(3, {
-      message: "gym description must have at least 3 characters",
+      message: "exercise description must have at least 3 characters",
     })
     .max(200, {
       message: "200 max characters.",
     }),
-  price: z.coerce.number().max(10000, {
-    message: "10000 max price.",
-  }),
-  duration: z.coerce
-    .number({
-      message: "gym plan duration must be a number",
-    })
-    .max(10000, {
-      message: "10000 max duration.",
-    }),
-  imageUrl: z
+  gifUrl: z
     .string()
     .min(3, {
-      message: "imageUrl must have at least 3 characters",
+      message: "gifUrl must have at least 3 characters",
     })
     .max(200, {
       message: "200 max characters.",
@@ -76,13 +66,11 @@ function Page() {
     setIsLoading(true);
     baseUrlRoute
       .post(
-        "/gym/plans",
+        "/exercises",
         {
           name: values.name,
           description: values.description,
-          price: values.price,
-          duration: values.duration,
-          img: values.imageUrl,
+          gif: values.gifUrl,
         },
         { headers: { Authorization: `Bearer ${authToken}` } }
       )
@@ -101,7 +89,7 @@ function Page() {
             } else {
               toast({
                 variant: "destructive",
-                title: "could not create gym plan, reason : " + e.response.data,
+                title: "could not create exercise, reason :" + e.response.data,
               });
             }
             setIsLoading(false);
@@ -109,14 +97,14 @@ function Page() {
   }
   useEffect(() => {
     if (data) {
-        toast({
-          title: data.message,
-        });
-      }
+      toast({
+        title: data.message,
+      });
+    }
   }, [data]);
   return (
     <div className="flex flex-col justify-center items-center my-4">
-      <h1 className="text-1xl font-bold">Create Plan:</h1>
+      <h1 className="text-1xl font-bold">Create Exercise:</h1>
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
@@ -127,7 +115,7 @@ function Page() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Monthly Bodybuilding" {...field} />
+                    <Input placeholder="Preacher Curl" {...field} />
                   </FormControl>
                   <FormDescription>Plan name</FormDescription>
                   <FormMessage />
@@ -142,7 +130,7 @@ function Page() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="This plan grants you access to..."
+                      placeholder="This exercise targets your biceps brachii"
                       {...field}
                     />
                   </FormControl>
@@ -153,48 +141,15 @@ function Page() {
             />
             <FormField
               control={form.control}
-              name="price"
+              name="gifUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Gif Url</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="100" {...field} />
+                    <Input  placeholder="https://i.pinimg.com/originals/14/49/c1/1449c166c96b868ed52b019d98250987.gif" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The plan price, accepts float numbers
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="duration"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Duration</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="30" {...field} />
-                  </FormControl>
-                  <FormDescription>The plan duration in days</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Logo Image Url</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiDZxQfY5I4t3TrgiIfevE_aBfI7Mdf1O05A&s"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    plan image (if possible a square one)
+                    A gif URL demonstrating how to do it
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

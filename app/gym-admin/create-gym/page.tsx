@@ -36,8 +36,8 @@ const formSchema = z.object({
     .min(3, {
       message: "gym description must have at least 3 characters",
     })
-    .max(40, {
-      message: "40 max characters.",
+    .max(200, {
+      message: "200 max characters.",
     }),
   location: z
     .string()
@@ -71,7 +71,6 @@ function Page() {
   };
   const [data, setData] = useState<Response>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const authToken = getCookie("auth");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -97,30 +96,31 @@ function Page() {
         setIsLoading(false);
         setData(res.data);
       })
-      .catch((e) => setError(e));
+      .catch((e) => {
+        if (axios.isAxiosError(e) && e.response) {
+          const statusCode = e.response.status;
+          if (statusCode == 404) {
+            toast({
+              variant: "destructive",
+              title: "user gym not found",
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "could not create gym, reason : " + e.response.data,
+            });
+          }
+          setIsLoading(false);
+        }
+      });
   }
   useEffect(() => {
-    if (axios.isAxiosError(error) && error.response) {
-      const statusCode = error.response.status;
-      if (statusCode == 400) {
-        toast({
-          variant: "destructive",
-          title: "user already has a gym",
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "could not create gym",
-        });
-      }
-      setIsLoading(false);
-    }
     if (data) {
       toast({
         title: data.message,
       });
     }
-  }, [data, error]);
+  }, [data]);
   return (
     <div className="flex flex-col justify-center items-center my-4">
       <h1 className="text-1xl font-bold">Create gym:</h1>
