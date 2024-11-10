@@ -1,9 +1,9 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
+import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { Calendar, DollarSign, Loader2, Notebook, Timer } from "lucide-react";
-import { useEffect, useState } from "react";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -13,9 +13,6 @@ const formatter = new Intl.NumberFormat("en-US", {
 
 export default function Page() {
   const authToken = getCookie("auth");
-  const [data, setData] = useState<Response>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
   type Response = {
     name: string;
     description: string;
@@ -37,22 +34,17 @@ export default function Page() {
     description: string;
     img: string;
   };
-  useEffect(() => {
-    baseUrlRoute
-      .get("/user/gym/details", {
+  const { data, error, isLoading } = useQuery<Response>({
+    queryKey: ["gym"],
+    queryFn: async () => {
+      const res = await baseUrlRoute.get("/user/gym/details", {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-      })
-      .then((res) => {
-        setData(res.data);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        setError(e);
-        setIsLoading(false);
       });
-  }, [authToken]);
+      return res.data;
+    },
+  });
 
   if (error) return <div>User gym not found </div>;
 

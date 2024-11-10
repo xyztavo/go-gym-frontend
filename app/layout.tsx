@@ -4,6 +4,8 @@ import { Navbar } from "@/components/navbar";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import React from "react";
+import ReactQueryProvider from "@/utils/react-query-provider";
 
 export const metadata: Metadata = {
   title: "Go Gym",
@@ -13,6 +15,7 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -20,18 +23,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body className={`${inter.className} antialiased`}>
-          <Navbar />
-          {children}
-          <Toaster />
-        </body>
-      </ThemeProvider>
+      <ReactQueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <body className={`${inter.className} antialiased`}>
+            <Navbar />
+            {children}
+            <Toaster />
+          </body>
+        </ThemeProvider>
+      </ReactQueryProvider>
     </html>
   );
 }

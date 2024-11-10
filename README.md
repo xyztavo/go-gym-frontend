@@ -6,7 +6,7 @@
 - [x] 50% done, need to get plans and routines, in /user, GET /user/gym/details
 - [x] gym admins can create plans
 - [x] admins or gym admins can create exercise
-- [ ] get exercises
+- [X] get exercises
 - [ ] admins or gym admins can create exercise-reps
 - [ ] get exercises-reps
 - [ ] admins or gym admins can create collections
