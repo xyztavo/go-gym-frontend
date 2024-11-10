@@ -44,6 +44,7 @@ export default function Page() {
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center border border-muted rounded-md w-[95%] md:w-[80%] my-4 p-4 gap-4">
         <h1 className="font-semibold text-2xl">Exercises:</h1>
+        {data == null && <div>No exercises were found</div>}
         {isLoading ? (
           <div>loading...</div>
         ) : (
@@ -68,16 +69,18 @@ export default function Page() {
               ))}
           </div>
         )}
-        <div className="flex flex-row gap-2 items-center">
-          <Input
-            placeholder="Search: Triceps pushdown"
-            onChange={(value) => setQuery(value.target.value)}
-            value={query}
-          />
-          <Button onClick={handleSubmit}>
-            <Search />
-          </Button>
-        </div>
+          <form onSubmit={(e) => {
+            e.preventDefault() 
+            handleSubmit()}} className="flex flex-row gap-2 items-center" >
+            <Input
+              placeholder="Search: Triceps pushdown"
+              onChange={(value) => setQuery(value.target.value)}
+              value={query}
+            />
+            <Button onClick={handleSubmit}>
+              <Search />
+            </Button>
+          </form>
       </div>
     </div>
   );
