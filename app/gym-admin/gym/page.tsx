@@ -5,10 +5,10 @@ import { getCookie } from "cookies-next";
 import { Calendar, DollarSign, Loader2, Notebook, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  trailingZeroDisplay: 'stripIfInteger' 
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  trailingZeroDisplay: "stripIfInteger",
 });
 
 export default function Page() {
@@ -73,27 +73,29 @@ export default function Page() {
             alt={data.name + " image"}
           />
           <h1 className="text-2xl font-bold">{data.name}</h1>
-          <div className="flex flex-row items-center justify-center gap-4 flex-wrap">
-            <div className="flex flex-col border rounded-md border-muted p-2">
-              <p className="text-center font-bold pb-2">Description:</p>
-              <p className="font-light border-t border-muted pt-2">
-                {data.description}
-              </p>
-            </div>
-            <div className="flex flex-col border rounded-md border-muted p-2">
-              <p className="text-center font-bold pb-2">Location:</p>
-              <p className="font-light border-t border-muted pt-2">
-                {data.location}
-              </p>
-            </div>
-            <div className="flex flex-col border rounded-md border-muted p-2">
-              <p className="text-center font-bold pb-2">Number:</p>
-              <a
-                href={`tel:${data.number}`}
-                className="font-light border-t border-muted pt-2"
-              >
-                {data.number}
-              </a>
+          <div className="flex flex-col items-center justify-center gap-4 flex-wrap">
+            <div className="flex flex-row items-center justify-center gap-4 flex-wrap">
+              <div className="flex flex-col border rounded-md border-muted p-2">
+                <p className="text-center font-bold pb-2">Description:</p>
+                <p className="font-light border-t border-muted pt-2">
+                  {data.description}
+                </p>
+              </div>
+              <div className="flex flex-col border rounded-md border-muted p-2">
+                <p className="text-center font-bold pb-2">Location:</p>
+                <p className="font-light border-t border-muted pt-2">
+                  {data.location}
+                </p>
+              </div>
+              <div className="flex flex-col border rounded-md border-muted p-2">
+                <p className="text-center font-bold pb-2">Number:</p>
+                <a
+                  href={`tel:${data.number}`}
+                  className="font-light border-t border-muted pt-2"
+                >
+                  {data.number}
+                </a>
+              </div>
             </div>
             {data.plans && (
               <div className="flex flex-col gap-4 items-center justify-center border-t border-muted py-4">
@@ -111,11 +113,19 @@ export default function Page() {
                       <p className="text-sm">{plan.description}</p>
                       <div className="flex flex-row items-center gap-4 flex-wrap justify-center">
                         <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2">
-                          <h2 className="font-semibold border-b border-muted text-center w-16 flex flex-row gap-2 items-center"><DollarSign className="w-4" />Price</h2>
-                          <p className="text-sm">{formatter.format(plan.price)}</p>
+                          <h2 className="font-semibold border-b border-muted text-center w-16 flex flex-row gap-2 items-center">
+                            <DollarSign className="w-4" />
+                            Price
+                          </h2>
+                          <p className="text-sm">
+                            {formatter.format(plan.price)}
+                          </p>
                         </div>
                         <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2">
-                          <h2 className="font-semibold border-b border-muted text-center w-18 flex flex-row gap-2 items-center"><Timer className="w-4"/>Duration</h2>
+                          <h2 className="font-semibold border-b border-muted text-center w-18 flex flex-row gap-2 items-center">
+                            <Timer className="w-4" />
+                            Duration
+                          </h2>
                           <p className="text-sm">{plan.duration} Days</p>
                         </div>
                       </div>
