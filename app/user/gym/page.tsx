@@ -43,7 +43,7 @@ export default function Page() {
         },
       });
       return res.data;
-    },
+    }, retry: false,
   });
 
   if (error) return <div>User gym not found </div>;

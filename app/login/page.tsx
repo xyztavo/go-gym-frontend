@@ -34,28 +34,40 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
 
   async function OnSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await baseUrlRoute.post("/auth",{
+      const res = await baseUrlRoute.post("/auth", {
         email: values.email,
         password: values.password,
       });
       const authToken = res.data.token;
       setCookie("auth", authToken);
       toast({ title: "User logged in!" });
-      router.push("/user");
-      router.refresh();
-      setIsLoading(false)
+      const role = res.data.role;
+
+      if (role == "regular") {
+        router.push("/user");
+        router.refresh();
+        setIsLoading(false);
+      } else if (role == "admin") {
+        router.push("/admin");
+        router.refresh();
+        setIsLoading(false);
+      } else if (role == "gym-admin") {
+        router.push("/gym-admin");
+        router.refresh();
+        setIsLoading(false);
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        setIsLoading(false)
+        setIsLoading(false);
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 401) {
@@ -71,7 +83,7 @@ export default function ProfileForm() {
           });
         }
       } else {
-        setIsLoading(false)
+        setIsLoading(false);
         // Handle other types of errors (like network errors)
         toast({
           variant: "destructive",
@@ -114,7 +126,13 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading} className="flex flex-row items-center justify-center">{isLoading && <Loader2Icon className="animate-spin" />}Submit</Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="flex flex-row items-center justify-center"
+            >
+              {isLoading && <Loader2Icon className="animate-spin" />}Submit
+            </Button>
           </form>
         </Form>
       </div>
