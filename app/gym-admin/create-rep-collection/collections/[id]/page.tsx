@@ -45,9 +45,9 @@ export default function Page() {
         return <div>User not authenticated</div>;
       }
     } else {
-      return <div>Something has happened, reason: {error.message}</div>;
+      return <div className="flex flex-col gap-4 my-4 items-center justify-center">Something has happened, reason: {error.message} <AddExerciseReps collectionId={params.id} refetchExercisesCollection={refetch} /></div>;
     }
-    return <div>Something has happened, reason: {error.response.data}</div>;
+    return <div className="flex flex-col gap-4 my-4 items-center justify-center">No exercise reps found. {error.response.data} <AddExerciseReps collectionId={params.id} refetchExercisesCollection={refetch} /></div>;
   }
 
   if (data == null) return <div>No exercise reps were found</div>;
