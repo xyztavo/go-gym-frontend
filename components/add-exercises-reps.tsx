@@ -58,7 +58,7 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
   });
 
   const { data, error, isLoading, refetch } = useQuery<Res[]>({
-    queryKey: ["exercises", query],
+    queryKey: ["exercises", setQuery],
     queryFn: async () => {
       const res = await baseUrlRoute.get("/exercises?query=" + query, {
         headers: { Authorization: `Bearer ${authToken}` },
@@ -145,7 +145,7 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
         onSubmit={form.handleSubmit(handleFormSubmit)} // Submit handler that collects the data and triggers the mutation
       >
         <div className="flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center border border-muted rounded-md w-[95%] md:w-[80%] my-4 p-4 gap-4">
+          <div className="flex flex-col items-center justify-center border border-muted rounded-md my-4 p-4 gap-4">
             <h1 className="font-semibold text-2xl">Add Exercises Reps:</h1>
             {data == null && <div>No exercises were found</div>}
             {isLoading ? (
