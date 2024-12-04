@@ -22,6 +22,9 @@ export default function Page() {
           <Button variant={"outline"} asChild>
             <Link href={"/gym-admin/create-rep-collection/collections"}>Add exercise reps to collection</Link>
           </Button>
+          <Button variant={"outline"} asChild>
+            <Link href={"/gym-admin/create-routine"}>Create routine</Link>
+          </Button>
         </div>
       </div>
     </div>
