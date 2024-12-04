@@ -20,14 +20,28 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
 // Define the response type from the query
 type Res = {
+  exercises: Exercises[];
+  pages: number;
+  maxPages: number;
+};
+
+type Exercises = {
   id: string;
   name: string;
   description: string;
   gif: string;
-  reps: number;  // Default reps value
-  sets: number;  // Default sets value
 };
 
 // Define the type for the exerciseRep object
@@ -45,24 +59,34 @@ type FormValues = {
   [key in `exercise_${number}_sets`]: number;
 } & {
   // Allow indexing with string keys to avoid the "no index signature" error
-  [key: string]: string;  // Index signature to allow any string key
+  [key: string]: string; // Index signature to allow any string key
 };
 
-export default function AddExerciseReps({ collectionId, refetchExercisesCollection }: { collectionId: string, refetchExercisesCollection: () => void  }) {
+export default function AddExerciseReps({
+  collectionId,
+  refetchExercisesCollection,
+}: {
+  collectionId: string;
+  refetchExercisesCollection: () => void;
+}) {
   const authToken = getCookie("auth");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
 
-  // React Hook Form setup
+  // React Hook Form setups
   const form = useForm<FormValues>({
     defaultValues: {},
   });
 
-  const { data, error, isLoading, refetch } = useQuery<Res[]>({
-    queryKey: ["exercises", setQuery],
+  const { data, error, isLoading, refetch } = useQuery<Res>({
+    queryKey: ["exercises", setQuery, page],
     queryFn: async () => {
-      const res = await baseUrlRoute.get("/exercises?query=" + query, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const res = await baseUrlRoute.get(
+        `/exercises?query=${query}&page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
       return res.data;
     },
     retry: false,
@@ -70,10 +94,16 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
 
   // Mutation for POST request
   const mutation = useMutation({
-    mutationFn: async ({ exerciseReps, collectionId }: { exerciseReps: ExerciseRep[]; collectionId: string }) => {
+    mutationFn: async ({
+      exerciseReps,
+      collectionId,
+    }: {
+      exerciseReps: ExerciseRep[];
+      collectionId: string;
+    }) => {
       const res = await baseUrlRoute.post(
         "/exercises-reps/collections/multiple",
-        { collectionId, exerciseReps },  // Include collectionId in the payload
+        { collectionId, exerciseReps }, // Include collectionId in the payload
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -84,7 +114,7 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
       return res.data;
     },
     onSuccess: () => {
-      refetchExercisesCollection()
+      refetchExercisesCollection();
       toast({
         title: "Exercises Updated",
         description: "Your exercises were successfully updated.",
@@ -112,14 +142,14 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
         // Check if the exercise is selected and get its reps and sets values
         if (formData[key]) {
           // Convert reps and sets values to numbers before adding them to the exerciseReps array
-          const reps = Number(formData[repsKey as keyof FormValues]) || 0;  // Ensure it's a number, default to 0
-          const sets = Number(formData[setsKey as keyof FormValues]) || 0;  // Ensure it's a number, default to 0
+          const reps = Number(formData[repsKey as keyof FormValues]) || 0; // Ensure it's a number, default to 0
+          const sets = Number(formData[setsKey as keyof FormValues]) || 0; // Ensure it's a number, default to 0
 
           // Correctly format the data as per the expected structure
           exerciseReps.push({
             exerciseId,
-            reps,  // Use number for reps
-            sets,  // Use number for sets
+            reps, // Use number for reps
+            sets, // Use number for sets
           });
         }
       }
@@ -152,8 +182,8 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
               <div>Loading...</div>
             ) : (
               <div className="flex flex-row items-center justify-center flex-wrap gap-4">
-                {data &&
-                  data.map((exercise) => (
+                {data?.exercises &&
+                  data.exercises.map((exercise) => (
                     <div key={exercise.id} className="space-y-6">
                       <FormField
                         control={form.control}
@@ -185,13 +215,12 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
                           </FormItem>
                         )}
                       />
-
                       {/* Only show rep and set inputs if the exercise is checked */}
                       {form.watch(`exercise_${exercise.id}_selected`) && (
                         <>
                           <FormField
                             control={form.control}
-                            name={`exercise_${exercise.id}_reps`}  // Reps input for selected exercise
+                            name={`exercise_${exercise.id}_reps`}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
                                 <FormLabel>Reps</FormLabel>
@@ -199,17 +228,15 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
                                   <Input
                                     type="number"
                                     {...field}
-                                    defaultValue={exercise.reps}  // Prefill with fetched reps
                                     placeholder="Reps"
                                   />
                                 </FormControl>
                               </FormItem>
                             )}
                           />
-
                           <FormField
                             control={form.control}
-                            name={`exercise_${exercise.id}_sets`}  // Sets input for selected exercise
+                            name={`exercise_${exercise.id}_sets`}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
                                 <FormLabel>Sets</FormLabel>
@@ -217,7 +244,6 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
                                   <Input
                                     type="number"
                                     {...field}
-                                    defaultValue={exercise.sets}  // Prefill with fetched sets
                                     placeholder="Sets"
                                   />
                                 </FormControl>
@@ -248,7 +274,42 @@ export default function AddExerciseReps({ collectionId, refetchExercisesCollecti
                 <Search />
               </Button>
             </form>
-
+            {data?.maxPages && (
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    {page > 0 && (
+                      <PaginationPrevious onClick={() => setPage(page - 1)} />
+                    )}
+                  </PaginationItem>
+                  {page > 0 && (
+                    <PaginationItem>
+                      <PaginationLink onClick={() => setPage(page - 1)}>
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationLink isActive>{page + 1}</PaginationLink>
+                  </PaginationItem>
+                  {page <= data?.maxPages - 2 && (
+                    <PaginationItem>
+                      <PaginationLink onClick={() => setPage(page + 1)}>
+                        {page + 2}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  {page <= data?.maxPages - 2 && (
+                    <PaginationItem>
+                      <PaginationNext onClick={() => setPage(page + 1)} />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            )}
             {/* Submit button */}
             <Button type="submit" className="mt-4">
               Submit Selected Exercises

@@ -17,6 +17,8 @@ type ExerciseRepsResult = {
 };
 
 export default function Page() {
+ 
+  
   const authToken = getCookie("auth");
   const params = useParams<{ id: string }>();
 
