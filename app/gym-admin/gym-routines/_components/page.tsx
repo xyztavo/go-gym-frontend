@@ -19,14 +19,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
- 
+
 type Res = {
   page: number;
   maxPages: number;
-  collections: Collection[];
+  routines: Routine[];
 };
 
-type Collection = {
+type Routine = {
   id: string;
   adminId: string;
   name: string;
@@ -34,7 +34,8 @@ type Collection = {
   img: string;
 };
 
-export default function AddCollectionToRoutine({routineId, refetchCollections} : {routineId: string, refetchCollections: () => void}) {
+
+export default function AddGymRoutine({ refetchRoutines } : { refetchRoutines: () => void}) {
   const authToken = getCookie("auth");
 
   const [query, setQuery] = useState("");
@@ -46,29 +47,39 @@ export default function AddCollectionToRoutine({routineId, refetchCollections} :
   };
 
   const { data, isLoading, error, refetch } = useQuery<Res>({
-    queryKey: ["/collections", handleSubmit, page],
+    queryKey: ["/routines", handleSubmit, page],
     queryFn: async () => {
       const res = await baseUrlRoute.get(
-        `/collections?query=${query}&page=${page}`,
+        `/routines?query=${query}&page=${page}`,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       return res.data;
     },
   });
 
-  const {mutate, error: mutateError, isPending } = useMutation({ mutationFn: async ({collectionId} : {collectionId: string}) => {
-    const res = await baseUrlRoute.post(`/routines/${routineId}/collections/${collectionId}`, {}, { headers: { Authorization: `Bearer ${authToken}`}})
-    return res.data
-  }, onSuccess: () =>  refetchCollections()})
+    const {
+      mutate,
+      error: mutateError,
+      isPending,
+    } = useMutation({
+      mutationFn: async ({ routineId }: { routineId: string }) => {
+        const res = await baseUrlRoute.post(
+          `/gym/routines/${routineId}`,
+          {},
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        return res.data;
+      }, onSuccess: () => refetchRoutines()
+    });
+    if (mutateError) {
+        if (isAxiosError(mutateError) && mutateError.response) {
+          toast({
+            title: mutateError.message,
+          });
+        }
+      }
 
-  if (mutateError) {
-    if (isAxiosError(mutateError) && mutateError.response) {
-        toast({
-            title: mutateError.message
-        })
-    }
-  }
-
+  
   if (isAxiosError(error) && error.response) {
     const statusCode = error.status;
     if (statusCode == 404) {
@@ -87,36 +98,44 @@ export default function AddCollectionToRoutine({routineId, refetchCollections} :
   return (
     <div className="flex flex-col items-center justify-center gap-2 m-2 p-2 ">
       <h1 className="font-bold text-2xl">
-        Select a collection to add to the routine:
+        Select a routine to add to the gym:
       </h1>
       <div className="flex flex-row flex-wrap items-center justify-center gap-2 p-2 border border-muted rounded-md">
         {data && (
           <>
-            {data.collections ?
-              data.collections.map((collection) => {
+            {data.routines ? (
+              data.routines.map((routine) => {
                 return (
                   <div
-                    key={collection.id}
+                    key={routine.id}
                     className="flex flex-col flex-wrap items-center justify-center gap-2 p-2 border border-muted rounded-md"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       className=" w-44 h-44 border object-cover border-muted rounded-md"
-                      src={collection.img}
-                      alt={`collection ${collection.name} image`}
+                      src={routine.img}
+                      alt={`collection ${routine.name} image`}
                     />
                     <h1 className="text-xl w-44 h-7 overflow-auto font-semibold">
-                      {collection.name}
+                      {routine.name}
                     </h1>
                     <p className="text-sm w-44 h-7 overflow-auto font-thin">
-                      {collection.description}
+                      {routine.description}
                     </p>
-                    <Button onClick={() => {
-                        mutate({ collectionId: collection.id })
-                        }} disabled={isPending}>Submit</Button>
+                    <Button
+                      onClick={() => {
+                        mutate({ routineId: routine.id });
+                      }}
+                      disabled={isPending}
+                    >
+                      Submit
+                    </Button>
                   </div>
                 );
-              }) : <div> could not find collection</div>}
+              })
+            ) : (
+              <div> could not find routine</div>
+            )}
           </>
         )}
       </div>

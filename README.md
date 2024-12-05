@@ -13,6 +13,9 @@
 - [x] admins or gym admins can create routines
 - [x] get collections
 - [x] get routines route
-- [ ] gym admins can add gym-routines
-
+- [x] gym admins can add gym-routines
+- [ ] gym admin can also delete and update stuff 
+- - [ ] update gym
+- - [ ] update and delete plans
+- - [ ] delete gym routines
 
