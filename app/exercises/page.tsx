@@ -9,24 +9,47 @@ import { getCookie } from "cookies-next";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
-type res = {
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+// Define the response type from the query
+type Res = {
+  exercises: Exercises[];
+  pages: number;
+  maxPages: number;
+};
+
+type Exercises = {
   id: string;
   name: string;
   description: string;
   gif: string;
 };
+
 export default function Page() {
   const authToken = getCookie("auth");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
+
   const handleSubmit = () => {
     refetch();
   };
-  const { data, error, isLoading, refetch } = useQuery<res[]>({
+  const { data, error, isLoading, refetch } = useQuery<Res>({
     queryKey: ["exercises", handleSubmit],
     queryFn: async () => {
-      const res = await baseUrlRoute.get("/exercises?query=" + query, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const res = await baseUrlRoute.get(
+        `/exercises?query=${query}&page=${page}`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
       return res.data;
     },
     retry: false,
@@ -49,8 +72,8 @@ export default function Page() {
           <div>loading...</div>
         ) : (
           <div className="flex flex-row items-center justify-center flex-wrap gap-4">
-            {data &&
-              data.map((exercise) => (
+            {data?.exercises ? (
+              data.exercises.map((exercise) => (
                 <div
                   className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56"
                   key={exercise.id}
@@ -66,21 +89,73 @@ export default function Page() {
                     {exercise.description}
                   </p>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                no exercises were found{" "}
+                <Button
+                  onClick={() => {
+                    location.reload();
+                  }}
+                >
+                  Refresh
+                </Button>
+              </div>
+            )}
           </div>
         )}
-          <form onSubmit={(e) => {
-            e.preventDefault() 
-            handleSubmit()}} className="flex flex-row gap-2 items-center" >
-            <Input
-              placeholder="Search: Triceps pushdown"
-              onChange={(value) => setQuery(value.target.value)}
-              value={query}
-            />
-            <Button onClick={handleSubmit}>
-              <Search />
-            </Button>
-          </form>
+        {data?.maxPages && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                {page > 0 && (
+                  <PaginationPrevious onClick={() => setPage(page - 1)} />
+                )}
+              </PaginationItem>
+              {page > 0 && (
+                <PaginationItem>
+                  <PaginationLink onClick={() => setPage(page - 1)}>
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationLink isActive>{page + 1}</PaginationLink>
+              </PaginationItem>
+              {page <= data?.maxPages - 2 && (
+                <PaginationItem>
+                  <PaginationLink onClick={() => setPage(page + 1)}>
+                    {page + 2}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              {page <= data?.maxPages - 2 && (
+                <PaginationItem>
+                  <PaginationNext onClick={() => setPage(page + 1)} />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+          className="flex flex-row gap-2 items-center"
+        >
+          <Input
+            placeholder="Search: Triceps pushdown"
+            onChange={(value) => setQuery(value.target.value)}
+            value={query}
+          />
+          <Button onClick={handleSubmit}>
+            <Search />
+          </Button>
+        </form>
       </div>
     </div>
   );

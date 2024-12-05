@@ -4,6 +4,7 @@ import { baseUrlRoute } from "@/api/lib/routes";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import { Calendar, DollarSign, Loader2, Notebook, Timer } from "lucide-react";
+import Link from "next/link";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -23,6 +24,7 @@ export default function Page() {
     routines: Routine[];
   };
   type Plan = {
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -30,6 +32,7 @@ export default function Page() {
     img: string;
   };
   type Routine = {
+    id: string;
     name: string;
     description: string;
     img: string;
@@ -139,8 +142,8 @@ export default function Page() {
                 </h1>
                 <div className="flex flex-row flex-wrap  gap-4">
                   {data.routines.map((routines, i) => (
-                    <div
-                      className="border border-muted p-2 rounded-md flex flex-col justify-center items-center"
+                    <Link href={`/routines/${routines.id}/collections`}
+                      className="bg-background hover:scale-110 transition-transform border border-muted p-2 rounded-md flex flex-col justify-center items-center"
                       key={i}
                     >
                       <h1 className="font-semibold">{routines.name}</h1>
@@ -151,7 +154,7 @@ export default function Page() {
                         className="object-cover w-24 h-24 rounded-md border border-muted"
                         alt={routines.name + " image"}
                       />
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
