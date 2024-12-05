@@ -11,8 +11,8 @@
 - [x] get exercises-reps
 - [x] admins or gym admins can create collections
 - [x] admins or gym admins can create routines
-- [ ] get collections
-- [ ] get routines route
+- [x] get collections
+- [x] get routines route
 - [ ] gym admins can add gym-routines
 
 
