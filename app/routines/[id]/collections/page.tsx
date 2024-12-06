@@ -44,7 +44,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center justify-center my-4 p-2 gap-2">
-      <h1 className="text-2xl font-bold">Routines Collections</h1>
+      <h1 className="text-2xl font-bold">Routine Collections:</h1>
       <div className="flex flex-row items-center justify-center flex-wrap border border-muted rounded-md p-4 gap-2">
         {isLoading && <Loader />}
         {data &&
