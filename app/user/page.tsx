@@ -13,6 +13,9 @@ export default function Page() {
           <Button asChild>
             <Link href={"/exercises"}>Explore exercises</Link>
           </Button>
+          <Button asChild>
+            <Link href={"/user/check-in"}>Check In</Link>
+          </Button>
         </div>
       </div>
     </div>
