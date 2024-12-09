@@ -105,7 +105,7 @@ export default function Page() {
                       key={i}
                     >
                       <h1 className="font-semibold">{plan.name}</h1>
-                      <p className="text-sm">{plan.description}</p>
+                      <p className="text-sm w-44 h-7 overflow-auto">{plan.description}</p>
                       <div className="flex flex-row items-center gap-4 flex-wrap justify-center">
                         <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2">
                           <h2 className="font-semibold border-b border-muted text-center w-16 flex flex-row gap-2 items-center">

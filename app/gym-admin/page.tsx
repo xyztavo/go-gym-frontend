@@ -25,6 +25,9 @@ export default function Page() {
           <Button variant={"outline"} asChild>
             <Link href={"/gym-admin/check-in"}>Check in user</Link>
           </Button>
+          <Button variant={"outline"} asChild>
+            <Link href={"/gym-admin/set-user-plan"}>Add plan to user</Link>
+          </Button>
         </div>
         <h1 className="text-xl font-semibold">Global:</h1>
         <div className="flex flex-row flex-wrap items-center justify-center gap-4">

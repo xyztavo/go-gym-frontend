@@ -14,6 +14,9 @@
 - [x] get collections
 - [x] get routines route
 - [x] gym admins can add gym-routines
+- [x] gym admins can set user plans
+- [x] user can check in generating a qr code
+- [ ] gym admin can read the qrcode and check in user
 - [ ] gym admin can also delete and update stuff 
 - - [ ] update gym
 - - [ ] update and delete plans
