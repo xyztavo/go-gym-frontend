@@ -8,7 +8,6 @@ import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 import { QRCodeSVG } from "qrcode.react";
-
 type token = {
   id: string;
 };
@@ -55,9 +54,7 @@ export default function Page() {
       <div className="flex flex-col items-center justify-center gap-2 my-4 ">
         <div className="flex flex-col items-center justify-center p-4 border border-muted rounded-md gap-2">
           <div className="flex flex-col border items-center justify-center border-background rounded-md p-2 gap-2 bg-primary">
-            <h1 className="font-semibold text-xl">
-              {data?.message}!
-            </h1>
+            <h1 className="font-semibold text-xl">{data?.message}!</h1>
             <div className="flex flex-row border items-center justify-center border-muted rounded-md p-2 gap-2  bg-background">
               <h1 className="font-semibold">Days until plan expires:</h1>
               <h2 className="font-semibold bg-muted p-2 rounded-md border border-background">
@@ -66,11 +63,9 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center gap-2">
-            <h1 className="text-xl font-semibold">
-              Check-in QR Code:
-            </h1>
+            <h1 className="text-xl font-semibold">Check-in QR Code:</h1>
             <QRCodeSVG
-              className="w-64 h-64 rounded-md border border-muted"
+              className="w-64 h-64 border-white border-4"
               value={decoded.id}
             />
           </div>

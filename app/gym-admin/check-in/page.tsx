@@ -3,10 +3,11 @@
 import { baseUrlRoute } from "@/api/lib/routes";
 import { toast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { QrReader } from "react-qr-reader";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import Loader from "@/components/loader";
+import { Scanner } from "@yudiel/react-qr-scanner";
+
 type Res = {
   daysUntilPlanExpires: number;
 };
@@ -44,6 +45,7 @@ export default function Page() {
         description: `Days until plan expires: ${data.daysUntilPlanExpires}`,
       });
     },
+    retry: false,
   });
 
   return (
@@ -51,19 +53,18 @@ export default function Page() {
       {isPending ? (
         <Loader />
       ) : (
-        <QrReader
-          className="w-[80%]"
-          constraints={{ facingMode: "environment" }}
-          onResult={(result, error) => {
-            if (!!result) {
-              mutate({ id: result.toString() });
-            }
-
-            if (!!error) {
-              console.info(error);
-            }
-          }}
-        />
+        <div>
+          <div className="scale-[0.25] flex flex-col items-center justify-center">
+            <Scanner
+              constraints={{ facingMode: "environment" }}
+              onScan={(result) => {
+                if (result != null) {
+                  mutate({ id: result.toString() });
+                }
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
