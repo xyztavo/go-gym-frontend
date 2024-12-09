@@ -30,7 +30,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-// Define the response type from the query
 type Res = {
   exercises: Exercises[];
   pages: number;
@@ -44,7 +43,6 @@ type Exercises = {
   gif: string;
 };
 
-// Define the type for the exerciseRep object
 type ExerciseRep = {
   exerciseId: string;
   reps: number | boolean;
@@ -58,8 +56,7 @@ type FormValues = {
 } & {
   [key in `exercise_${number}_sets`]: number;
 } & {
-  // Allow indexing with string keys to avoid the "no index signature" error
-  [key: string]: string; // Index signature to allow any string key
+  [key: string]: string;
 };
 
 export default function AddExerciseReps({
@@ -73,7 +70,6 @@ export default function AddExerciseReps({
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
 
-  // React Hook Form setups
   const form = useForm<FormValues>({
     defaultValues: {},
   });
@@ -92,7 +88,6 @@ export default function AddExerciseReps({
     retry: false,
   });
 
-  // Mutation for POST request
   const mutation = useMutation({
     mutationFn: async ({
       exerciseReps,
@@ -103,7 +98,7 @@ export default function AddExerciseReps({
     }) => {
       const res = await baseUrlRoute.post(
         "/exercises-reps/collections/multiple",
-        { collectionId, exerciseReps }, // Include collectionId in the payload
+        { collectionId, exerciseReps },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -128,34 +123,32 @@ export default function AddExerciseReps({
     },
   });
 
-  // Handle form submission and prepare data for mutation
   const handleFormSubmit: SubmitHandler<FormValues> = (formData) => {
     const exerciseReps: ExerciseRep[] = [];
 
-    // Loop through each exercise and gather the selected reps and sets
     for (const key in formData) {
       if (key.startsWith("exercise_") && key.includes("_selected")) {
-        const exerciseId = key.split("_")[1]; // Extract the exercise ID from the key
-        const repsKey = `exercise_${exerciseId}_reps`;
-        const setsKey = `exercise_${exerciseId}_sets`;
+        const match = key.match(/^exercise_([^_]+(?:_[^_]+)*)_selected$/);
+        if (match) {
+          const exerciseId = match[1];
 
-        // Check if the exercise is selected and get its reps and sets values
-        if (formData[key]) {
-          // Convert reps and sets values to numbers before adding them to the exerciseReps array
-          const reps = Number(formData[repsKey as keyof FormValues]) || 0; // Ensure it's a number, default to 0
-          const sets = Number(formData[setsKey as keyof FormValues]) || 0; // Ensure it's a number, default to 0
+          const repsKey = `exercise_${exerciseId}_reps`;
+          const setsKey = `exercise_${exerciseId}_sets`;
 
-          // Correctly format the data as per the expected structure
-          exerciseReps.push({
-            exerciseId,
-            reps, // Use number for reps
-            sets, // Use number for sets
-          });
+          if (formData[key]) {
+            const reps = Number(formData[repsKey]) || 0;
+            const sets = Number(formData[setsKey]) || 0;
+
+            exerciseReps.push({
+              exerciseId,
+              reps,
+              sets,
+            });
+          }
         }
       }
     }
 
-    // Call mutation to send data to the server, including collectionId
     mutation.mutate({ exerciseReps, collectionId });
   };
 
@@ -171,9 +164,7 @@ export default function AddExerciseReps({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleFormSubmit)} // Submit handler that collects the data and triggers the mutation
-      >
+      <form onSubmit={form.handleSubmit(handleFormSubmit)}>
         <div className="flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center border border-muted rounded-md my-4 p-4 gap-4">
             <h1 className="font-semibold text-2xl">Add Exercises Reps:</h1>
@@ -187,7 +178,7 @@ export default function AddExerciseReps({
                     <div key={exercise.id} className="space-y-6">
                       <FormField
                         control={form.control}
-                        name={`exercise_${exercise.id}_selected`} // Checkbox to select the exercise
+                        name={`exercise_${exercise.id}_selected`}
                         render={({ field }) => (
                           <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
                             <FormControl>
@@ -199,8 +190,7 @@ export default function AddExerciseReps({
                             <div className="space-y-1 leading-none">
                               <FormLabel>{exercise.name}</FormLabel>
                               <FormDescription>
-                                <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56">
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56 gap-2">
                                   <img
                                     className="w-56 h-40 object-cover rounded-md border border-muted"
                                     src={exercise.gif}
@@ -215,7 +205,6 @@ export default function AddExerciseReps({
                           </FormItem>
                         )}
                       />
-                      {/* Only show rep and set inputs if the exercise is checked */}
                       {form.watch(`exercise_${exercise.id}_selected`) && (
                         <>
                           <FormField
@@ -257,11 +246,10 @@ export default function AddExerciseReps({
               </div>
             )}
 
-            {/* Search Bar */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                refetch(); // Trigger search when form is submitted
+                refetch();
               }}
               className="flex flex-row gap-2 items-center"
             >
@@ -310,7 +298,6 @@ export default function AddExerciseReps({
                 </PaginationContent>
               </Pagination>
             )}
-            {/* Submit button */}
             <Button type="submit" className="mt-4">
               Submit Selected Exercises
             </Button>

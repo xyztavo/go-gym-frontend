@@ -1,10 +1,14 @@
 "use client";
 import { baseUrlRoute } from "@/api/lib/routes";
 import AddExerciseReps from "@/components/add-exercises-reps";
+import ErrorDiv from "@/components/error";
 import Loader from "@/components/loader";
-import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
+import { Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 
 type ExerciseRepsResult = {
@@ -17,24 +21,51 @@ type ExerciseRepsResult = {
 };
 
 export default function Page() {
- 
-  
   const authToken = getCookie("auth");
   const params = useParams<{ id: string }>();
 
+  // delete exercise rep
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const res = await baseUrlRoute.delete(
+        `/exercises-reps/collections/${id}`,
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      return res.data;
+    }, onError: (e) => {
+      if (isAxiosError(e) && e.response) {
+        const statusCode = e.response.status;
+        if (statusCode === 401) {
+          toast({
+            variant: "destructive",
+            title: "User is not admin",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: e.response.data,
+          });
+        }
+      } 
+    }, onSuccess: () => {
+      refetch();
+    }
+  });
+
+  // get exercises reps
   const { data, isLoading, error, refetch } = useQuery<ExerciseRepsResult[]>({
     queryKey: ["/collection/id/exercise-reps"],
     queryFn: async () => {
-        const res = await baseUrlRoute.get(
-            `/collections/${params.id}/exercises-reps`, 
-            {
-              headers: {
-                "Authorization": `Bearer ${authToken}`,
-                "Content-Type": "application/json", 
-              },
-            }
-          );
-          return res.data; 
+      const res = await baseUrlRoute.get(
+        `/collections/${params.id}/exercises-reps`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return res.data;
     },
     retry: false,
   });
@@ -43,16 +74,17 @@ export default function Page() {
 
   if (error) {
     if (isAxiosError(error) && error.response) {
-      if (error.status == 401) {
-        return <div>User not authenticated</div>;
-      }
-    } else {
-      return <div className="flex flex-col gap-4 my-4 items-center justify-center">Something has happened, reason: {error.message} <AddExerciseReps collectionId={params.id} refetchExercisesCollection={refetch} /></div>;
+      return (
+        <ErrorDiv
+          error={error.response.data}
+          statusCode={error.response.status}
+        />
+      );
     }
-    return <div className="flex flex-col gap-4 my-4 items-center justify-center">No exercise reps found. {error.response.data} <AddExerciseReps collectionId={params.id} refetchExercisesCollection={refetch} /></div>;
+    return <ErrorDiv error="Something went wrong" statusCode={500} />;
   }
 
-  if (data == null) return <div>No exercise reps were found</div>;
+  if (data == null) return <ErrorDiv error="no exercises reps were found in this collection" statusCode={404} />
 
   if (data)
     return (
@@ -64,14 +96,17 @@ export default function Page() {
               key={exercise.id}
               className="flex flex-col md:flex-row items-center justify-center border border-muted rounded-md gap-2 p-2"
             >
+              <Button variant={'destructive'} size={'icon'} onClick={() => mutate({ id: exercise.id })} disabled={isPending}>{isPending && <Loader />}<Trash2 /></Button>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={exercise.gif}
                 alt={exercise.name + " gif"}
                 className="w-12 h-12 object-cover border-r border-muted"
               />
-              <h1 className="font-semibold">{exercise.name}</h1>
-              <p className="font-light text-sm h-6 overflow-y-auto">{exercise.description}</p>
+              <h1 className="font-semibold w-44 text-center h-6 overflow-auto">{exercise.name}</h1>
+              <p className="font-light text-sm w-44 h-6 overflow-auto">
+                {exercise.description}
+              </p>
               <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
                 <h1 className="font-semibold border-muted">Reps</h1>
                 <h1>{exercise.reps}</h1>
@@ -83,7 +118,10 @@ export default function Page() {
             </div>
           ))}
         </div>
-        <AddExerciseReps collectionId={params.id} refetchExercisesCollection={refetch} />
+        <AddExerciseReps
+          collectionId={params.id}
+          refetchExercisesCollection={refetch}
+        />
       </div>
     );
 }
