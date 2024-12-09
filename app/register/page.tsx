@@ -20,7 +20,6 @@ import { setCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { baseUrlRoute } from "@/api/lib/routes";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 
