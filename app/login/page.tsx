@@ -19,9 +19,9 @@ import axios from "axios";
 import { setCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { baseUrlRoute } from "@/api/lib/routes";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -34,40 +34,40 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
 
-  async function OnSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    try {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
       const res = await baseUrlRoute.post("/auth", {
-        email: values.email,
-        password: values.password,
+        email: email,
+        password: password,
       });
       const authToken = res.data.token;
       setCookie("auth", authToken);
       toast({ title: "User logged in!" });
       const role = res.data.role;
-
       if (role == "regular") {
         router.push("/user");
         router.refresh();
-        setIsLoading(false);
       } else if (role == "admin") {
         router.push("/admin");
         router.refresh();
-        setIsLoading(false);
       } else if (role == "gym-admin") {
         router.push("/gym-admin");
         router.refresh();
-        setIsLoading(false);
       }
-    } catch (error) {
+    },
+    onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
-        setIsLoading(false);
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 401) {
@@ -83,14 +83,18 @@ export default function ProfileForm() {
           });
         }
       } else {
-        setIsLoading(false);
         // Handle other types of errors (like network errors)
         toast({
           variant: "destructive",
           title: "An unexpected error occurred.",
         });
       }
-    }
+    },
+  });
+
+  async function OnSubmit(values: z.infer<typeof formSchema>) {
+    
+    mutate({ email: values.email, password: values.password });
   }
   return (
     <div className="flex flex-col justify-center items-center my-4">
@@ -128,10 +132,10 @@ export default function ProfileForm() {
             />
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isPending}
               className="flex flex-row items-center justify-center"
             >
-              {isLoading && <Loader2Icon className="animate-spin" />}Submit
+              {isPending && <Loader2Icon className="animate-spin" />}Submit
             </Button>
           </form>
         </Form>

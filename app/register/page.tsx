@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(5, {
@@ -36,7 +37,6 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,34 +45,43 @@ export default function ProfileForm() {
       name: "",
     },
   });
-
-  async function OnSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    try {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({
+      name,
+      email,
+      password,
+    }: {
+      name: string;
+      email: string;
+      password: string;
+    }) => {
       const res = await baseUrlRoute.post("/users", {
-        name: values.name,
-        email: values.email,
-        password: values.password,
+        name: name,
+        email: email,
+        password: password,
       });
       const authToken = res.data.token;
       setCookie("auth", authToken);
       toast({ title: "User created with ease!" });
       router.push("/user");
       router.refresh();
-      setIsLoading(false)
-    } catch (error) {
+    }, onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
-        setIsLoading(false)
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 500) {
           toast({
             variant: "destructive",
-            title: `Either server down or user already exists`,
+            title: `Error reason: ${error.response.data}`,
+          });
+        }
+        if (statusCode == 409) {
+          toast({
+            variant: "destructive",
+            title: `User email already in use`,
           });
         }
       } else {
-        setIsLoading(false)
         // Handle other types of errors (like network errors)
         toast({
           variant: "destructive",
@@ -80,6 +89,10 @@ export default function ProfileForm() {
         });
       }
     }
+  })
+
+  async function OnSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
   }
   return (
     <div className="flex flex-col justify-center items-center my-4">
@@ -129,7 +142,7 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading} className="flex flex-row items-center justify-center">{isLoading && <Loader2 className="animate-spin" />}Submit</Button>
+            <Button type="submit" disabled={isPending} className="flex flex-row items-center justify-center">{isPending && <Loader2 className="animate-spin" />}Submit</Button>
           </form>
         </Form>
       </div>
