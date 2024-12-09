@@ -1,6 +1,6 @@
 "use client";
 import { baseUrlRoute } from "@/api/lib/routes";
-import AddExerciseReps from "@/components/add-exercises-reps";
+import AddExerciseReps from "@/app/gym-admin/create-rep-collection/collections/[id]/_components/add-exercises-reps";
 import ErrorDiv from "@/components/error";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";

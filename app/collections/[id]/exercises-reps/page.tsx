@@ -64,8 +64,12 @@ export default function Page() {
         {data &&
           data.map((exercise) => {
             return (
-                <Drawer  key={exercise.id}>
-                    <Checkbox className="w-6 h-6" />
+              <div
+                key={exercise.id}
+                className="flex flex-row items-center justify-center gap-2 border rounded-md p-2 border-muted"
+              >
+                <Drawer>
+                  <Checkbox className="w-6 h-6" />
                   <DrawerTrigger>
                     <div className="flex bg-background hover:scale-110 transition-transform flex-row items-center justify-center border border-muted rounded-md pr-2 gap-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -74,18 +78,20 @@ export default function Page() {
                         src={exercise.gif}
                         alt={`exercise ${exercise.name} image`}
                       />
-                      <h1 className="flex items-center justify-center text-xl md:w-44 md:h-24 overflow-auto font-semibold">
+                      <h1 className="flex items-center w-24 h-12 justify-center md:text-xl md:w-44 md:h-24 font-semibold">
                         {exercise.name}
                       </h1>
                       <p className="hidden md:flex items-center justify-center text-sm md:w-44 md:h-24 text-center overflow-auto">
                         {exercise.description}
                       </p>
                       <div className="flex flex-row gap-2">
-                        <p className="text-sm border border-muted rounded-md p-2">
-                          Reps: {exercise.reps}
-                        </p>
-                        <p className="text-sm border border-muted rounded-md p-2">
-                          Sets: {exercise.sets}
+                        <div className="flex flex-col text-sm border border-muted rounded-md">
+                          <p>Reps</p>
+                          <span> {exercise.reps}</span>
+                        </div>
+                        <p className="text-sm border border-muted rounded-md">
+                          <p>Sets</p>
+                          <span>{exercise.sets}</span>
                         </p>
                       </div>
                     </div>
@@ -125,6 +131,7 @@ export default function Page() {
                     </DrawerFooter>
                   </DrawerContent>
                 </Drawer>
+              </div>
             );
           })}
       </div>
