@@ -38,8 +38,8 @@ export default function Page() {
             <Link href={"/gym-admin/create-collection"}>Create Collection</Link>
           </Button>
           <Button variant={"outline"} asChild>
-            <Link href={"/gym-admin/create-rep-collection/collections"}>
-              Add exercise reps to collection
+            <Link href={"/gym-admin/edit-rep-collection/collections"}>
+              Edit exercises reps in collection
             </Link>
           </Button>
           <Button variant={"outline"} asChild>

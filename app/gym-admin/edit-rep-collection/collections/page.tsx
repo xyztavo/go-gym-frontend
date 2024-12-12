@@ -48,7 +48,7 @@ export default function Page() {
         <div className="flex flex-row flex-wrap items-center justify-center gap-2">
           {data.map((collection) => (
             <Link
-              href={`/gym-admin/create-rep-collection/collections/${collection.id}`}
+              href={`/gym-admin/edit-rep-collection/collections/${collection.id}`}
               key={collection.id}
               className="flex flex-col gap-2 items-center justify-center p-2 border bg-background border-muted rounded-md hover:scale-[1.1] transition-transform"
             >
