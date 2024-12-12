@@ -21,6 +21,7 @@
 - - [ ] update gym
 - - [x] delete exercises-reps-collections
 - - [x] delete routines-collections 
-- - [ ] update and delete plans
+- - [x] delete plans
+- - [ ] update plans
 - - [ ] delete gym routines
 

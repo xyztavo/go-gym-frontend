@@ -14,7 +14,7 @@ export default function Page() {
             <Link href={"/gym-admin/create-gym"}>Create Gym</Link>
           </Button>
           <Button variant={"outline"} asChild>
-            <Link href={"/gym-admin/create-plan"}>Create Plan</Link>
+            <Link href={"/gym-admin/edit-gym-plans"}>Edit Gym Plans</Link>
           </Button>
           <Button variant={"outline"} asChild>
             <Link href={"/gym-admin/gym-routines"}>Edit Gym-Routines</Link>
