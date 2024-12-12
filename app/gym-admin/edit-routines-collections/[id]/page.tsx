@@ -3,11 +3,13 @@
 import { baseUrlRoute } from "@/api/lib/routes";
 import Loader from "@/components/loader";
 import { toast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { useParams } from "next/navigation";
 import AddCollectionToRoutine from "./_components/add-collection-to-routines";
+import { Loader2, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Res = {
   id: string;
@@ -20,6 +22,36 @@ type Res = {
 export default function Page() {
   const params = useParams<{ id: string }>();
   const authToken = getCookie("auth");
+
+  // delete collection
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const res = await baseUrlRoute.delete(
+        `/routines/${params.id}/collections/${id}`,
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      return res.data;
+    },
+    onError: (e) => {
+      if (isAxiosError(e) && e.response) {
+        const statusCode = e.response.status;
+        if (statusCode === 401) {
+          toast({
+            variant: "destructive",
+            title: "User is not admin",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: e.response.data,
+          });
+        }
+      }
+    },
+    onSuccess: () => {
+      refetch();
+    },
+  });
   const { data, isLoading, error, refetch } = useQuery<Res[]>({
     queryKey: ["/routines/id/collections"],
     queryFn: async () => {
@@ -50,28 +82,46 @@ export default function Page() {
             <Loader />
           ) : (
             <>
-              {data ?
+              {data ? (
                 data.map((collection) => {
                   return (
                     <div
                       className="flex bg-background flex-col items-center justify-center border border-muted rounded-md p-2 gap-2"
                       key={collection.id}
                     >
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => mutate({ id: collection.id })}
+                        disabled={isPending}
+                      >
+                        {isPending ? <Loader2 className="animate-spin"/> :  <Trash2 />}
+                      </Button>
+
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         className="w-44 h-44 object-cover"
                         src={collection.img}
                         alt={`routine ${collection.name} image`}
                       />
-                      <h1 className="text-xl w-44 h-7 overflow-auto font-semibold">{collection.name}</h1>
-                      <p className="text-sm w-44 h-7 overflow-auto font-thin">{collection.description}</p>
+                      <h1 className="text-xl w-44 h-7 overflow-auto font-semibold">
+                        {collection.name}
+                      </h1>
+                      <p className="text-sm w-44 h-7 overflow-auto font-thin">
+                        {collection.description}
+                      </p>
                     </div>
                   );
-                }) : <div>no colletions found in routine</div>}
+                })
+              ) : (
+                <div>no colletions found in routine</div>
+              )}
             </>
           )}
         </div>
-        <AddCollectionToRoutine routineId={params.id} refetchCollections={refetch} />
+        <AddCollectionToRoutine
+          routineId={params.id}
+          refetchCollections={refetch}
+        />
       </div>
     </div>
   );

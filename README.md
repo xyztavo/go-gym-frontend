@@ -19,7 +19,7 @@
 - [x] gym admin can read the qrcode and check in user
 - [ ] gym admin can also delete and update stuff 
 - - [ ] update gym
-- - [ ] delete exercises-reps-collections
+- - [x] delete exercises-reps-collections
 - - [x] delete routines-collections 
 - - [ ] update and delete plans
 - - [ ] delete gym routines
