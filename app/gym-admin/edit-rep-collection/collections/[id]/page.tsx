@@ -74,71 +74,60 @@ export default function Page() {
 
   if (isLoading) return <Loader />;
 
-  if (error) {
-    if (isAxiosError(error) && error.response) {
-      return (
-        <ErrorDiv
-          error={error.response.data}
-          statusCode={error.response.status}
-        />
-      );
-    }
-    return <ErrorDiv error="Something went wrong" statusCode={500} />;
-  }
-
-  if (data == null)
-    return (
-      <ErrorDiv
-        error="no exercises reps were found in this collection"
-        statusCode={404}
-      />
-    );
-
-  if (data)
-    return (
-      <div className="flex flex-col items-center justify-center my-2 gap-2">
-        <h1>Collection exercise reps:</h1>
-        <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-          {data.map((exercise) => (
-            <div
-              key={exercise.id}
-              className="flex flex-col md:flex-row items-center justify-center border border-muted rounded-md gap-2 p-2"
+  return data ? (
+    <div className="flex flex-col items-center justify-center my-2 gap-2">
+      {error && <ErrorDiv error="something happened" statusCode={500} />}
+      <h1>Collection exercise reps:</h1>
+      <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+        {data.map((exercise) => (
+          <div
+            key={exercise.id}
+            className="flex flex-col md:flex-row items-center justify-center border border-muted rounded-md gap-2 p-2"
+          >
+            <Button
+              variant={"destructive"}
+              size={"icon"}
+              onClick={() => mutate({ id: exercise.id })}
+              disabled={isPending}
             >
-              <Button
-                variant={"destructive"}
-                size={"icon"}
-                onClick={() => mutate({ id: exercise.id })}
-                disabled={isPending}
-              >
-                {isPending ? <Loader2 className="animate-spin" /> : <Trash2 />}
-              </Button>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={exercise.gif}
-                alt={exercise.name + " gif"}
-                className="w-12 h-12 rounded-md object-cover border border-muted"
-              />
-              <h1 className="font-semibold w-44 text-center h-6 overflow-auto">
-                {exercise.name}
-              </h1>
-              <p className="font-light text-sm w-44 h-6 overflow-auto">
-                {exercise.description}
-              </p>
-              <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
-                <h1 className="font-semibold border-muted">Reps</h1>
-                <h1>{exercise.reps}</h1>
-              </div>
-              <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
-                <h1 className="font-semibold border-muted">Sets</h1>
-                <h1>{exercise.sets}</h1>
-              </div>
+              {isPending ? <Loader2 className="animate-spin" /> : <Trash2 />}
+            </Button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={exercise.gif}
+              alt={exercise.name + " gif"}
+              className="w-12 h-12 rounded-md object-cover border border-muted"
+            />
+            <h1 className="font-semibold w-44 text-center h-6 overflow-auto">
+              {exercise.name}
+            </h1>
+            <p className="font-light text-sm w-44 h-6 overflow-auto">
+              {exercise.description}
+            </p>
+            <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
+              <h1 className="font-semibold border-muted">Reps</h1>
+              <h1>{exercise.reps}</h1>
             </div>
-          ))}
-        </div>
-        <AddExerciseReps
-          collectionId={params.id}
-          refetchExercisesCollection={refetch}
-        />
+            <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
+              <h1 className="font-semibold border-muted">Sets</h1>
+              <h1>{exercise.sets}</h1>
+            </div>
+          </div>
+        ))}
       </div>
-    );
+      <AddExerciseReps
+        collectionId={params.id}
+        refetchExercisesCollection={refetch}
+      />
+    </div>
+  ) : (
+    <div>
+      No Exercises reps found in collection
+      {error && <ErrorDiv error="something happened" statusCode={500} />}
+      <AddExerciseReps
+        collectionId={params.id}
+        refetchExercisesCollection={refetch}
+      />
+    </div>
+  );
 }

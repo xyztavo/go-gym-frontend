@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 
 type Res = {
   id: string;
+  routineCollectionId: string;
   adminId: string;
   name: string;
   description: string;
@@ -91,7 +92,7 @@ export default function Page() {
                     >
                       <Button
                         variant={"destructive"}
-                        onClick={() => mutate({ id: collection.id })}
+                        onClick={() => mutate({ id: collection.routineCollectionId })}
                         disabled={isPending}
                       >
                         {isPending ? <Loader2 className="animate-spin"/> :  <Trash2 />}

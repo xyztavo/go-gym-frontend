@@ -1,6 +1,7 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
+import ErrorDiv from "@/components/error";
 import Loader from "@/components/loader";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
@@ -10,6 +11,7 @@ import { useParams } from "next/navigation";
 
 type Res = {
   id: string;
+  routineCollectionId: string;
   adminId: string;
   name: string;
   description: string;
@@ -21,7 +23,7 @@ export default function Page() {
   const authToken = getCookie("auth");
 
   const { data, isLoading, error } = useQuery<Res[]>({
-    queryKey: ["/routines/id/collections"],
+    queryKey: [`/routines/${params.id}/collections`],
     queryFn: async () => {
       const res = await baseUrlRoute.get(`/routines/${params.id}/collections`, {
         headers: {
@@ -46,14 +48,14 @@ export default function Page() {
     <div className="flex flex-col items-center justify-center my-4 p-2 gap-2">
       <h1 className="text-2xl font-bold">Routine Collections:</h1>
       <div className="flex flex-row items-center justify-center flex-wrap border border-muted rounded-md p-4 gap-2">
-        {isLoading && <Loader />}
+        {isLoading ? <Loader /> : <>{data == null && <ErrorDiv error="no collections found in this routine" statusCode={404} />}</>}
         {data &&
           data.map((collection) => {
             return (
               <Link
                 href={`/collections/${collection.id}/exercises-reps`}
                 className="flex flex-col items-center justify-center border border-muted rounded-md p-2 gap-2 bg-background hover:scale-110 transition-transform"
-                key={collection.id}
+                key={collection.routineCollectionId}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -65,7 +67,7 @@ export default function Page() {
                 <p className="text-sm font-thin w-44 h-7 overflow-auto">{collection.description}</p>
               </Link>
             );
-          })}
+          }) }
       </div>
     </div>
   );

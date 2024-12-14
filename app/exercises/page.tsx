@@ -42,7 +42,7 @@ export default function Page() {
     refetch();
   };
   const { data, error, isLoading, refetch } = useQuery<Res>({
-    queryKey: ["exercises", handleSubmit],
+    queryKey: ["exercises", page, handleSubmit],
     queryFn: async () => {
       const res = await baseUrlRoute.get(
         `/exercises?query=${query}&page=${page}`,
@@ -84,7 +84,7 @@ export default function Page() {
                     src={exercise.gif}
                     alt={exercise.name + "gif"}
                   />
-                  <h1 className="font-semibold text-xl">{exercise.name}</h1>
+                  <h1 className="font-semibold text-xl h-8 overflow-auto">{exercise.name}</h1>
                   <p className="font-sm h-10 overflow-y-scroll">
                     {exercise.description}
                   </p>

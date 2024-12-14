@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Loader from "@/components/loader";
+import ErrorDiv from "@/components/error";
 
 type Res = {
   id: string;
@@ -33,7 +34,7 @@ export default function Page() {
   const authToken = getCookie("auth");
 
   const { data, error, isLoading } = useQuery<Res[]>({
-    queryKey: ["/collection/id/exercises-reps"],
+    queryKey: [`/collection/${params.id}/exercises-reps`],
     queryFn: async () => {
       const res = await baseUrlRoute.get(
         `/collections/${params.id}/exercises-reps`,
@@ -45,6 +46,7 @@ export default function Page() {
       );
       return res.data;
     },
+    retry: false,
   });
   if (error) {
     if (isAxiosError(error) && error.response) {
@@ -60,7 +62,18 @@ export default function Page() {
     <div className="flex flex-col justify-center items-center my-4 gap-4">
       <h1 className="font-bold text-2xl">Collection Exercises Reps:</h1>
       <div className="flex flex-row items-center justify-center flex-wrap md:border border-muted rounded-md md:p-4 gap-2">
-        {isLoading && <Loader />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {data == null && (
+              <ErrorDiv
+                error="no exercises reps were found in this collection"
+                statusCode={404}
+              />
+            )}
+          </>
+        )}
         {data &&
           data.map((exercise) => {
             return (
