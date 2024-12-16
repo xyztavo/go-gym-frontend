@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { getCookie } from "cookies-next";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Pen, Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,6 +23,7 @@ import { isAxiosError } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Loader from "@/components/loader";
 import ErrorDiv from "@/components/error";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z
@@ -125,7 +126,7 @@ function Page() {
         }
       }
     },
-  })
+  });
 
   // create gym plan
   const { mutate: mutateCreate, isPending: isCreatePending } = useMutation<
@@ -188,32 +189,42 @@ function Page() {
               data.map((plan) => (
                 <div
                   key={plan.id}
-                  className="flex flex-col border border-muted rounded-md p-2"
+                  className="flex flex-col bg-background border border-muted rounded-md p-2"
                 >
-                  <Button
-                    variant={"destructive"}
-                    size={"icon"}
-                    className="absolute border-4 border-background "
-                    onClick={() => mutateDelete({ id: plan.id })}
-                    disabled={isDeletePending}
-                  >
-                    {isDeletePending ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <Trash2  />
-                    )}
-                  </Button>
-                
-                    
+                  <div className="flex flex-row gap-24 p-1 items-center justify-between absolute">
+                    <Button
+                      variant={"destructive"}
+                      size={"icon"}
+                      className=""
+                      onClick={() => mutateDelete({ id: plan.id })}
+                      disabled={isDeletePending}
+                    >
+                      {isDeletePending ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <Trash2 />
+                      )}
+                    </Button>
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      className=""
+                      asChild
+                    >
+                      <Link href={`/gym-admin/edit-gym-plans/${plan.id}`}>
+                        <Pen />
+                      </Link>
+                    </Button>
+                  </div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={plan.img}
                     className="w-44 h-44 object-cover rounded-md border border-muted"
                     alt={`plan ${plan.name} image`}
                   />
-                  <h1 className="font-semibold">{plan.name}</h1>
+                  <h1 className="w-44 h-7 overflow-auto font-semibold">{plan.name}</h1>
                   <div className="flex flex-col gap-2">
-                    <p className="w-44 h-7 text-ellipsis overflow-auto">
+                    <p className="w-44 h-7 overflow-auto">
                       {plan.description}
                     </p>
                     <div className="flex flex-row gap-2 border border-muted rounded-md">

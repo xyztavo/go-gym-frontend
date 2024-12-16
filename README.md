@@ -17,12 +17,13 @@
 - [x] gym admins can set user plans
 - [x] user can check in generating a qr code
 - [x] gym admin can read the qrcode and check in user
-- [ ] ui looks like absolute shit and inconsistent
-- [ ] gym admin can also delete and update stuff 
+- [x] gym admin can also delete and update stuff 
 - - [x] update gym
 - - [x] delete exercises-reps-collections
 - - [x] delete routines-collections 
 - - [x] delete plans
-- - [ ] update plans
+- - [x] update plans
 - - [x] delete gym routines
+- [ ] ui looks like absolute shit and inconsistent
+- [ ] update exercise (will require backend and db refactor)
 
