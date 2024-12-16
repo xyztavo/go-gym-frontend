@@ -1,4 +1,29 @@
-# Todo
+
+# Go-Gym Frontend
+
+## Overview
+Go-Gym is a gym management app where gym admins can create gyms, manage plans, exercises, and routines, while users can check in using QR codes and track their workouts.
+
+## Features
+- **Admin Features**:
+  - Create gyms, exercises, routines, and plans
+  - Manage users and gym routines
+  - Scan QR codes to check in users
+- **User Features**:
+  - Register, log in, and track progress
+  - Generate and scan QR codes for check-in
+
+## Tech Stack
+- **Next.js** (React framework)
+- **Tailwind CSS / Shadcn UI** (styling)
+- **React Query** (data fetching)
+- **Zod** (validation)
+## Screen shots:
+<img src="./assets/ss1.png" alt="Gym Logo" width="300"/>
+<img src="./assets/ss2.png" alt="Gym Logo" width="300"/>
+<img src="./assets/ss3.png" alt="Gym Logo" width="300"/>
+
+## Todo
 - [x] catch error in register and send a toast when it occurs
 - [x] log in 
 - [x] set user gym admin 
@@ -24,6 +49,7 @@
 - - [x] delete plans
 - - [x] update plans
 - - [x] delete gym routines
+- - [ ] delete routines 
 - [ ] ui looks like absolute shit and inconsistent
 - [ ] update exercise (will require backend and db refactor)
 

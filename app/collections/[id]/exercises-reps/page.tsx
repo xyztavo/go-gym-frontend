@@ -91,7 +91,7 @@ export default function Page() {
                         src={exercise.gif}
                         alt={`exercise ${exercise.name} image`}
                       />
-                      <h1 className="flex items-center w-24 h-12 justify-center md:text-xl md:w-44 md:h-24 font-semibold">
+                      <h1 className=" w-44 overflow-auto  text-sm md:text-xl font-semibold">
                         {exercise.name}
                       </h1>
                       <p className="hidden md:flex items-center justify-center text-sm md:w-44 md:h-24 text-center overflow-auto">
@@ -99,12 +99,12 @@ export default function Page() {
                       </p>
                       <div className="flex flex-row gap-2">
                         <div className="flex flex-col text-sm border border-muted rounded-md">
-                          <p>Reps</p>
-                          <span> {exercise.reps}</span>
+                          <p className="border-b border-muted bg-muted">Reps</p>
+                          <span className="font-bold"> {exercise.reps}</span>
                         </div>
-                        <p className="text-sm border border-muted rounded-md">
-                          <p>Sets</p>
-                          <span>{exercise.sets}</span>
+                        <p className="text-sm border border-muted rounded-md ">
+                          <p className="border-b border-muted bg-muted">Sets</p>
+                          <span className="font-bold ">{exercise.sets}</span>
                         </p>
                       </div>
                     </div>
