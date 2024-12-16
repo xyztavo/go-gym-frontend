@@ -107,7 +107,7 @@ export default function Page() {
                     </a>
                   </div>
                 </div>
-                <div className="flex flex-row flex-wrap gap-2">
+                <div className="flex flex-row items-center justify-center flex-wrap gap-2">
                   {data.plans && (
                     <div className="flex flex-col gap-4 items-center justify-center border rounded-md p-2 border-muted py-4">
                       <h1 className="text-xl font-semibold flex flex-row gap-2 items-center justify-center">
