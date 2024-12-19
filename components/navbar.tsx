@@ -1,4 +1,6 @@
-"use client"
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
@@ -13,9 +15,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+
 export function Navbar() {
-  const authToken = getCookie("auth");
-  const router = useRouter()
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    setAuthToken(getCookie("auth") || null); // Set authToken after component mounts
+  }, []);
+
   return (
     <div className="flex justify-between items-center border-b border-muted p-2">
       <Button
@@ -29,12 +37,17 @@ export function Navbar() {
           Go Gym
         </Link>
       </Button>
-      {authToken != null ?(
-        <Button onClick={() => {
-          deleteCookie("auth")
-          router.push("/")
-          router.refresh()
-        }}>Log out</Button>
+
+      {authToken ? (
+        <Button
+          onClick={() => {
+            deleteCookie("auth");
+            router.push("/");
+            router.refresh();
+          }}
+        >
+          Log out
+        </Button>
       ) : (
         <div>
           <div className="xl:hidden md:hidden">

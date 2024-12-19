@@ -22,20 +22,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <ReactQueryProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <body className={`${inter.className} antialiased`}>
+        <body className={`${inter.className} antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <Navbar />
             {children}
             <Toaster />
-          </body>
-        </ThemeProvider>
+          </ThemeProvider>
+        </body>
       </ReactQueryProvider>
     </html>
   );
