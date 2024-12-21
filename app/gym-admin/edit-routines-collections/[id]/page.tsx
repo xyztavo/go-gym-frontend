@@ -84,26 +84,36 @@ export default function Page() {
           ) : (
             <>
               {data ? (
-                data.map((collection) => {
+                data.map((collection,  i) => {
                   return (
                     <div
                       className="flex bg-background flex-col items-center justify-center border border-muted rounded-md p-2 gap-2"
-                      key={collection.id}
+                      key={i}
                     >
-                      <Button
-                        variant={"destructive"}
-                        onClick={() => mutate({ id: collection.routineCollectionId })}
-                        disabled={isPending}
-                      >
-                        {isPending ? <Loader2 className="animate-spin"/> :  <Trash2 />}
-                      </Button>
+                      <div>
+                        <Button
+                          variant={"destructive"}
+                          className="absolute m-1 border-2 rounded-md border-muted"
+                          size={"icon"}
+                          onClick={() =>
+                            mutate({ id: collection.routineCollectionId })
+                          }
+                          disabled={isPending}
+                        >
+                          {isPending ? (
+                            <Loader2 className="animate-spin" />
+                          ) : (
+                            <Trash2 />
+                          )}
+                        </Button>
 
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        className="w-44 h-44 object-cover"
-                        src={collection.img}
-                        alt={`routine ${collection.name} image`}
-                      />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="w-44 h-44 rounded-md border border-muted object-cover"
+                          src={collection.img}
+                          alt={`routine ${collection.name} image`}
+                        />
+                      </div>
                       <h1 className="text-xl w-44 h-7 overflow-auto font-semibold">
                         {collection.name}
                       </h1>

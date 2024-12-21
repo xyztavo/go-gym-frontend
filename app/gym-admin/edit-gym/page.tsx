@@ -1,7 +1,6 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
-import { withGymAdminProtectedRoute } from "@/components/auth/gym-admin-protected-route";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -78,7 +77,7 @@ type GymResponse = {
   img: string;
 };
 
-function Page() {
+export default function Page() {
   const authToken = getCookie("auth");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,14 +91,15 @@ function Page() {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       return res.data;
-    }, retry: false
+    },
+    retry: false,
   });
 
   useEffect(() => {
     if (data) {
-      form.reset(data); 
+      form.reset(data);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // update gym
@@ -130,7 +130,7 @@ function Page() {
     },
   });
 
-  // create gym 
+  // create gym
   const { mutate, isPending } = useMutation<
     Response,
     Error,
@@ -171,119 +171,143 @@ function Page() {
       {isLoading && <Loader />}
       {data && data.name ? (
         <div className="flex flex-col items-center justify-center gap-4 my-4">
-          <div className="flex flex-col gap-2 items-center justify-center border rounded-md p-2 border-muted">
-            <h1 className="text-xl font-bold">{data.name}</h1>
-            <p>description: {data.description}</p>
-            <p>location: {data.location}</p>
-            <p>number: {data.number}</p>
+          <div className="flex flex-col items-center justify-center gap-4 my-4 border border-muted rounded-md p-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={data.img}
-              className="w-44 h-44 object-cover rounded-md border border-muted"
-              loading="lazy"
-              alt=""
+              className="object-cover w-52 h-52 rounded-md border border-muted my-4"
+              alt={data.name + " image"}
             />
+            <div className="flex flex-col items-center justify-center gap-4 flex-wrap">
+              <h1 className="text-3xl font-bold">{data.name}</h1>
+              <div className="flex flex-row items-center justify-center gap-4 flex-wrap">
+                <div className="flex flex-col border rounded-md border-muted p-2 bg-background">
+                  <p className="text-center font-bold pb-2">Description:</p>
+                  <p className="font-light border-t border-primary pt-2 w-44 h-10 overflow-auto">
+                    {data.description}
+                  </p>
+                </div>
+                <div className="flex flex-col border rounded-md border-muted p-2 bg-background">
+                  <p className="text-center font-bold pb-2">Location:</p>
+                  <p className="font-light border-t border-primary pt-2 w-44 h-10 overflow-auto">
+                    {data.location}
+                  </p>
+                </div>
+                <div className="flex flex-col border rounded-md border-muted p-2 bg-background">
+                  <p className="text-center font-bold pb-2">Number:</p>
+                  <a
+                    href={`tel:${data.number}`}
+                    className="font-light border-t border-primary pt-2 w-44 h-10 overflow-auto"
+                  >
+                    {data.number}
+                  </a>
+                </div>
+              </div>
+            </div>
+            </div>
+            <h1 className="text-xl font-bold">Update gym:</h1>
+            <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(UpdateOnSubmit)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    defaultValue={data.name}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Waltuh Gym" {...field} />
+                        </FormControl>
+                        <FormDescription>The gym name</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    defaultValue={data.description}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="this gym very cool..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>The gym description</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    defaultValue={data.location}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Location</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="308 Negra Arroyo Lane..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Location where your gym resides
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="number"
+                    defaultValue={data.number}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+55 11 00000-0000" {...field} />
+                        </FormControl>
+                        <FormDescription>The gym phone number</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="img"
+                    defaultValue={data.img}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Logo Image Url</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiDZxQfY5I4t3TrgiIfevE_aBfI7Mdf1O05A&s"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Gym url logo (if possible a square one)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" disabled={isUpdatePending}>
+                    {isUpdatePending && <Loader2 className="animate-spin" />}
+                    Submit
+                  </Button>
+                </form>
+              </Form>
+            </div>
           </div>
-          <h1 className="text-xl font-bold">Update gym:</h1>
-          <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(UpdateOnSubmit)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  defaultValue={data.name}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Waltuh Gym" {...field} />
-                      </FormControl>
-                      <FormDescription>The gym name</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  defaultValue={data.description}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Input placeholder="this gym very cool..." {...field} />
-                      </FormControl>
-                      <FormDescription>The gym description</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="location"
-                  defaultValue={data.location}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="308 Negra Arroyo Lane..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Location where your gym resides
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="number"
-                  defaultValue={data.number}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Number</FormLabel>
-                      <FormControl>
-                        <Input placeholder="+55 11 00000-0000" {...field} />
-                      </FormControl>
-                      <FormDescription>The gym phone number</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="img"
-                  defaultValue={data.img}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Logo Image Url</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiDZxQfY5I4t3TrgiIfevE_aBfI7Mdf1O05A&s"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Gym url logo (if possible a square one)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={isUpdatePending}>
-                  {isUpdatePending && <Loader2 className="animate-spin" />}
-                  Submit
-                </Button>
-              </form>
-            </Form>
-          </div>
-        </div>
       ) : (
         <div>
           <h1 className="text-1xl font-bold">Create gym:</h1>
@@ -385,4 +409,3 @@ function Page() {
   );
 }
 
-export default withGymAdminProtectedRoute(Page);

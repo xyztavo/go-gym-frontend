@@ -13,7 +13,6 @@ type Res = {
 };
 export default function Page() {
   const authToken = getCookie("auth");
-
   const { mutate, isPending } = useMutation<Res, Error, { id: string }>({
     mutationFn: async ({ id }: { id: string }) => {
       const res = await baseUrlRoute.post(

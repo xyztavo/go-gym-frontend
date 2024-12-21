@@ -1,7 +1,6 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
-import { withGymAdminProtectedRoute } from "@/components/auth/gym-admin-protected-route";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -74,7 +73,7 @@ type Res = {
   img: string;
 };
 
-function Page() {
+export default function Page() {
   const authToken = getCookie("auth");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -222,11 +221,11 @@ function Page() {
                     className="w-44 h-44 object-cover rounded-md border border-muted"
                     alt={`plan ${plan.name} image`}
                   />
-                  <h1 className="w-44 h-7 overflow-auto font-semibold">{plan.name}</h1>
+                  <h1 className="w-44 h-7 overflow-auto font-semibold">
+                    {plan.name}
+                  </h1>
                   <div className="flex flex-col gap-2">
-                    <p className="w-44 h-7 overflow-auto">
-                      {plan.description}
-                    </p>
+                    <p className="w-44 h-7 overflow-auto">{plan.description}</p>
                     <div className="flex flex-row gap-2 border border-muted rounded-md">
                       <h1 className="border-r pr-2 border-muted">Price</h1>
                       <p>${plan.price}</p>
@@ -338,4 +337,3 @@ function Page() {
   );
 }
 
-export default withGymAdminProtectedRoute(Page);

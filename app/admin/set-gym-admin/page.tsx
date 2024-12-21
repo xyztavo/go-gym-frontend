@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
-import { withAdminProtectedRoute } from "@/components/auth/admin-protected-route";
 import { baseUrlRoute } from "@/api/lib/routes";
 
 const formSchema = z.object({
@@ -27,7 +26,7 @@ const formSchema = z.object({
   }),
 });
 
-function Page() {
+export default function Page() {
   const authToken = getCookie("auth");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -99,4 +98,3 @@ function Page() {
   );
 }
 
-export default withAdminProtectedRoute(Page);

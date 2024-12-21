@@ -14,8 +14,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormDescription,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -125,7 +123,6 @@ export default function AddExerciseReps({
 
   const handleFormSubmit: SubmitHandler<FormValues> = (formData) => {
     const exerciseReps: ExerciseRep[] = [];
-
     for (const key in formData) {
       if (key.startsWith("exercise_") && key.includes("_selected")) {
         const match = key.match(/^exercise_([^_]+(?:_[^_]+)*)_selected$/);
@@ -134,11 +131,9 @@ export default function AddExerciseReps({
 
           const repsKey = `exercise_${exerciseId}_reps`;
           const setsKey = `exercise_${exerciseId}_sets`;
-
           if (formData[key]) {
             const reps = Number(formData[repsKey]) || 0;
             const sets = Number(formData[setsKey]) || 0;
-
             exerciseReps.push({
               exerciseId,
               reps,
@@ -150,6 +145,19 @@ export default function AddExerciseReps({
     }
 
     mutation.mutate({ exerciseReps, collectionId });
+   // Reset the form
+   const resetValues = Object.keys(formData).reduce((acc, key) => {
+    if (key.startsWith("exercise_") && key.includes("_selected")) {
+      acc[key] = false as unknown as string; // Cast boolean to string for TypeScript compatibility
+    } else if (key.startsWith("exercise_") && (key.includes("_reps") || key.includes("_sets"))) {
+      acc[key] = "0"; // Reset numeric fields as strings
+    } else {
+      acc[key] = ""; // Reset other fields to empty strings
+    }
+    return acc;
+  }, {} as FormValues);
+
+  form.reset(resetValues);
   };
 
   if (error) {
@@ -175,44 +183,45 @@ export default function AddExerciseReps({
               <div className="flex flex-row items-center justify-center flex-wrap gap-4">
                 {data?.exercises &&
                   data.exercises.map((exercise) => (
-                    <div key={exercise.id} className="space-y-6">
+                    <div key={exercise.id} className="flex flex-row items-center justify-center">
                       <FormField
                         control={form.control}
                         name={`exercise_${exercise.id}_selected`}
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
-                            <FormControl>
+                          <FormItem className="flex flex-col items-center justify-center rounded-md border border-muted p-4">
+                            <div className="flex flex-row gap-2">
                               <Checkbox
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
                               />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>{exercise.name}</FormLabel>
-                              <FormDescription>
-                                <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56 gap-2">
-                                  <img
-                                    className="w-56 h-40 object-cover rounded-md border border-muted"
-                                    src={exercise.gif}
-                                    alt={exercise.name + " gif"}
-                                  />
-                                  <p className="font-sm h-10 overflow-y-scroll">
-                                    {exercise.description}
-                                  </p>
-                                </div>
-                              </FormDescription>
+                              <h1 className="w-40 text-sm h-7 overflow-y-scroll">
+                                {exercise.name}
+                              </h1>
+                            </div>
+                            <div className="leading-none">
+                              <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56 gap-2">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  className="w-56 h-40 object-cover rounded-md border border-muted"
+                                  src={exercise.gif}
+                                  alt={exercise.name + " gif"}
+                                />
+                                <p className="font-sm h-10 text-sm overflow-y-scroll">
+                                  {exercise.description}
+                                </p>
+                              </div>
                             </div>
                           </FormItem>
                         )}
                       />
                       {form.watch(`exercise_${exercise.id}_selected`) && (
-                        <>
+                        <div className="flex flex-col items-center w-56 justify-center border border-muted rounded-md absolute z-50 bg-background mt-44">
                           <FormField
                             control={form.control}
                             name={`exercise_${exercise.id}_reps`}
                             render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
-                                <FormLabel>Reps</FormLabel>
+                              <FormItem className="flex flex-row items-center justify-center rounded-md gap-2 p-2">
+                                <h2 className="text-sm font-semibold">Reps</h2>
                                 <FormControl>
                                   <Input
                                     type="number"
@@ -227,11 +236,12 @@ export default function AddExerciseReps({
                             control={form.control}
                             name={`exercise_${exercise.id}_sets`}
                             render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-muted p-4 shadow">
-                                <FormLabel>Sets</FormLabel>
-                                <FormControl>
+                              <FormItem className="flex flex-row items-center justify-center rounded-md gap-2 p-2">
+                                <h2 className="text-sm font-semibold">Sets</h2>
+                                <FormControl className="flex flex-row items-center justify-center m-0">
                                   <Input
                                     type="number"
+                                    className="m-0"
                                     {...field}
                                     placeholder="Sets"
                                   />
@@ -239,7 +249,7 @@ export default function AddExerciseReps({
                               </FormItem>
                             )}
                           />
-                        </>
+                        </div>
                       )}
                     </div>
                   ))}
@@ -280,7 +290,7 @@ export default function AddExerciseReps({
                   <PaginationItem>
                     <PaginationLink isActive>{page + 1}</PaginationLink>
                   </PaginationItem>
-                  {page <= data?.maxPages - 2 && (
+                  {page <= data?.maxPages - 1 && (
                     <PaginationItem>
                       <PaginationLink onClick={() => setPage(page + 1)}>
                         {page + 2}
@@ -290,7 +300,7 @@ export default function AddExerciseReps({
                   <PaginationItem>
                     <PaginationEllipsis />
                   </PaginationItem>
-                  {page <= data?.maxPages - 2 && (
+                  {page <= data?.maxPages - 1 && (
                     <PaginationItem>
                       <PaginationNext onClick={() => setPage(page + 1)} />
                     </PaginationItem>

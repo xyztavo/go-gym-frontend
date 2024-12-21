@@ -84,6 +84,7 @@ export default function Page() {
             key={exercise.id}
             className="flex flex-col md:flex-row items-center justify-center border border-muted rounded-md gap-2 p-2"
           >
+            <div className="flex flex-row items-center gap-2">
             <Button
               variant={"destructive"}
               size={"icon"}
@@ -98,12 +99,14 @@ export default function Page() {
               alt={exercise.name + " gif"}
               className="w-12 h-12 rounded-md object-cover border border-muted"
             />
+            </div>
             <h1 className="font-semibold w-44 text-center h-6 overflow-auto">
               {exercise.name}
             </h1>
             <p className="font-light text-sm w-44 h-6 overflow-auto">
               {exercise.description}
             </p>
+            <div className="flex flex-row gap-2">
             <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
               <h1 className="font-semibold border-muted">Reps</h1>
               <h1>{exercise.reps}</h1>
@@ -111,6 +114,7 @@ export default function Page() {
             <div className="flex flex-row border border-muted rounded-md p-2 gap-2">
               <h1 className="font-semibold border-muted">Sets</h1>
               <h1>{exercise.sets}</h1>
+            </div>
             </div>
           </div>
         ))}

@@ -1,7 +1,6 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
-import { withGymAdminProtectedRoute } from "@/components/auth/gym-admin-protected-route";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -49,7 +48,7 @@ const formSchema = z.object({
     }),
 });
 
-function Page() {
+export default function Page() {
   type Response = {
     message: string;
   };
@@ -164,5 +163,3 @@ function Page() {
     </div>
   );
 }
-
-export default withGymAdminProtectedRoute(Page);

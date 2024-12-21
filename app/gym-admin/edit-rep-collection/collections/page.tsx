@@ -1,6 +1,7 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
+import ErrorDiv from "@/components/error";
 import Loader from "@/components/loader";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
@@ -36,35 +37,41 @@ export default function Page() {
         return <div>User not authenticated</div>;
       }
     } else {
-        return <div>Something has happened, reason: {error.message}</div>;
+      return <div>Something has happened, reason: {error.message}</div>;
     }
     return <div>Something has happened, reason: {error.response.data}</div>;
   }
 
-  if (data)
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 my-2">
-        <h1 className="text-2xl font-semibold">Select a collection to add exercise reps:</h1>
-        <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-          {data.map((collection) => (
-            <Link
-              href={`/gym-admin/edit-rep-collection/collections/${collection.id}`}
-              key={collection.id}
-              className="flex flex-col gap-2 items-center justify-center p-2 border bg-background border-muted rounded-md hover:scale-[1.1] transition-transform"
-            >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={collection.img}
-                  alt={collection.name + " image"}
-                  className="w-48 h-48 object-cover border border-muted rounded-md"
-                />
-                <h1 className="font-semibold">{collection.name}</h1>
-                <p className="font-sm font-light h-6 overflow-y-auto">
-                  {collection.description}
-                </p>
-            </Link>
-          ))}
-        </div>
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 my-2">
+      <h1 className="text-2xl font-semibold">
+        Select a collection to add exercise reps:
+      </h1>
+      <div className="flex flex-row items-center justify-center flex-wrap border border-muted rounded-md p-4 gap-2">
+        {data == null && (
+          <ErrorDiv error="No collections found" statusCode={404} />
+        )}
+        {data?.map((collection) => (
+          <Link
+            href={`/gym-admin/edit-rep-collection/collections/${collection.id}`}
+            key={collection.id}
+            className="flex flex-col bg-background hover:scale-110 transition-transform items-center justify-center p-2 border border-muted rounded-md"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="w-44 h-44 object-cover border border-muted rounded-md"
+              src={collection.img}
+              alt={`routine ${collection.name} image`}
+            />
+            <h1 className="w-44 h-7 overflow-auto text-xl font-semibold">
+              {collection.name}
+            </h1>
+            <p className="w-44 h-7 overflow-auto text-sm font-thin">
+              {collection.description}
+            </p>
+          </Link>
+        ))}
       </div>
-    );
+    </div>
+  );
 }

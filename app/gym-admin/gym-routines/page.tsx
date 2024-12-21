@@ -33,7 +33,7 @@ export default function Page() {
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
-        toast({ 
+        toast({
           title: e.message,
         });
       } else {
@@ -67,31 +67,33 @@ export default function Page() {
                 key={routine.id}
                 className="flex flex-col items-center justify-center p-2 border border-muted rounded-md gap-2"
               >
-                <Button
-                  variant={"destructive"}
-                  className="absolute"
-                  size={"icon"}
-                  onClick={() => mutate({ id: routine.id })}
-                  disabled={isPending}
-                >
-                  {isPending ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <Trash2 />
-                  )}
-                </Button>
-                {/*  eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  className="border border-muted rounded-md w-44 h-44 object-cover"
-                  src={routine.img}
-                  alt={`gym routine ${routine.name} image`}
-                />
-                <h1 className="font-semibold text-xl w-44 h-7 overflow-auto">
-                  {routine.name}
-                </h1>
-                <p className="font-thin text-sm w-44 h-7 overflow-auto">
-                  {routine.description}
-                </p>
+                <div>
+                  <Button
+                    variant={"destructive"}
+                    className="absolute m-1 border-2 rounded-md border-muted"
+                    size={"icon"}
+                    onClick={() => mutate({ id: routine.id })}
+                    disabled={isPending}
+                  >
+                    {isPending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Trash2 />
+                    )}
+                  </Button>
+                  {/*  eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="border border-muted rounded-md w-44 h-44 object-cover"
+                    src={routine.img}
+                    alt={`gym routine ${routine.name} image`}
+                  />
+                  <h1 className="font-semibold text-xl w-44 h-7 overflow-auto">
+                    {routine.name}
+                  </h1>
+                  <p className="font-thin text-sm w-44 h-7 overflow-auto">
+                    {routine.description}
+                  </p>
+                </div>
               </div>
             );
           })}

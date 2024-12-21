@@ -105,8 +105,8 @@ export default function Page() {
       toast({
         title: "Plan updated successfully!",
       });
-      refetch()
-    }, 
+      refetch();
+    },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
         toast({
@@ -123,8 +123,8 @@ export default function Page() {
     if (data) {
       form.reset(data);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     mutate({ values });
@@ -140,7 +140,6 @@ export default function Page() {
       );
     }
   }
- 
 
   if (isLoading) return <Loader />;
 
@@ -148,17 +147,25 @@ export default function Page() {
     return (
       <div className="flex flex-col items-center justify-center my-4 gap-2">
         <h1 className="text-2xl font-bold">Plan:</h1>
-        <div className="flex flex-col items-center justify-center p-2 border rounded-md border-muted">
-          <h1 className="text-2xl">{data.name}</h1>
-          <p>Description: {data.description}</p>
-          <p>Price: {data.price}</p>
-          <p>Duration: {data.duration}</p>
+        <div className="flex flex-col bg-background border border-muted rounded-md p-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="w-44 h-44 object-cover border border-muted rounded-md"
             src={data.img}
-            alt=""
+            className="w-44 h-44 object-cover rounded-md border border-muted"
+            alt={`plan ${data.name} image`}
           />
+          <h1 className="w-44 h-7 overflow-auto font-semibold">{data.name}</h1>
+          <div className="flex flex-col gap-2">
+            <p className="w-44 h-7 overflow-auto">{data.description}</p>
+            <div className="flex flex-row gap-2 border border-muted rounded-md">
+              <h1 className="border-r pr-2 border-muted">Price</h1>
+              <p>${data.price}</p>
+            </div>
+            <div className="flex flex-row gap-2 border border-muted rounded-md">
+              <h1 className="border-r pr-2 border-muted">Duration</h1>
+              <p>{data.duration} Days</p>
+            </div>
+          </div>
         </div>
         <h1 className="text-2xl font-bold">Edit plan:</h1>
         <div className="flex flex-col items-center justify-center p-2 border rounded-md border-muted">
