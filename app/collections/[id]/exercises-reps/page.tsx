@@ -102,10 +102,10 @@ export default function Page() {
                           <p className="border-b border-muted bg-muted">Reps</p>
                           <span className="font-bold"> {exercise.reps}</span>
                         </div>
-                        <p className="text-sm border border-muted rounded-md ">
+                        <div className="text-sm border border-muted rounded-md ">
                           <p className="border-b border-muted bg-muted">Sets</p>
                           <span className="font-bold ">{exercise.sets}</span>
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </DrawerTrigger>
@@ -124,21 +124,21 @@ export default function Page() {
                     </DrawerHeader>
                     <DrawerFooter>
                       <div className="flex flex-row gap-2 items-center justify-center border border-muted rounded-md">
-                        <p className="flex flex-row items-center gap-2">
+                        <div className="flex flex-row items-center gap-2">
                           Reps:{" "}
                           <span className="font-bold border-x px-2 border-muted bg-muted">
                             {" "}
                             {exercise.reps}
                           </span>
-                        </p>
-                        <p className="flex flex-row items-center gap-2">
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
                           Sets:{" "}
                           <span className="font-bold border-x px-2 border-muted bg-muted">
                             {exercise.sets}
                           </span>
-                        </p>
+                        </div>
                       </div>
-                      <DrawerClose>
+                      <DrawerClose asChild>
                         <Button variant={"outline"}>Close</Button>
                       </DrawerClose>
                     </DrawerFooter>

@@ -29,8 +29,6 @@ export default function Page() {
     },
   });
 
-  if (isLoading) return <Loader />;
-
   if (error) {
     if (isAxiosError(error) && error.response) {
       if (error.status == 401) {
@@ -47,31 +45,39 @@ export default function Page() {
       <h1 className="text-2xl font-semibold">
         Select a collection to add exercise reps:
       </h1>
-      <div className="flex flex-row items-center justify-center flex-wrap border border-muted rounded-md p-4 gap-2">
-        {data == null && (
-          <ErrorDiv error="No collections found" statusCode={404} />
-        )}
-        {data?.map((collection) => (
-          <Link
-            href={`/gym-admin/edit-rep-collection/collections/${collection.id}`}
-            key={collection.id}
-            className="flex flex-col bg-background hover:scale-110 transition-transform items-center justify-center p-2 border border-muted rounded-md"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="w-44 h-44 object-cover border border-muted rounded-md"
-              src={collection.img}
-              alt={`routine ${collection.name} image`}
-            />
-            <h1 className="w-44 h-7 overflow-auto text-xl font-semibold">
-              {collection.name}
-            </h1>
-            <p className="w-44 h-7 overflow-auto text-sm font-thin">
-              {collection.description}
-            </p>
-          </Link>
-        ))}
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {" "}
+          {data ? (
+            <div className="flex flex-row items-center justify-center flex-wrap border border-muted rounded-md p-4 gap-2">
+              {data.map((collection) => (
+                <Link
+                  href={`/gym-admin/edit-rep-collection/collections/${collection.id}`}
+                  key={collection.id}
+                  className="flex flex-col bg-background hover:scale-110 transition-transform items-center justify-center p-2 border border-muted rounded-md"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="w-44 h-44 object-cover border border-muted rounded-md"
+                    src={collection.img}
+                    alt={`routine ${collection.name} image`}
+                  />
+                  <h1 className="w-44 h-7 overflow-auto text-xl font-semibold">
+                    {collection.name}
+                  </h1>
+                  <p className="w-44 h-7 overflow-auto text-sm font-thin">
+                    {collection.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <ErrorDiv error={"No collections found"} statusCode={404} />
+          )}
+        </>
+      )}
     </div>
   );
 }

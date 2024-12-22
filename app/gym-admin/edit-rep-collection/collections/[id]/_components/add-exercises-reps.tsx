@@ -9,12 +9,7 @@ import { getCookie } from "cookies-next";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -145,19 +140,22 @@ export default function AddExerciseReps({
     }
 
     mutation.mutate({ exerciseReps, collectionId });
-   // Reset the form
-   const resetValues = Object.keys(formData).reduce((acc, key) => {
-    if (key.startsWith("exercise_") && key.includes("_selected")) {
-      acc[key] = false as unknown as string; // Cast boolean to string for TypeScript compatibility
-    } else if (key.startsWith("exercise_") && (key.includes("_reps") || key.includes("_sets"))) {
-      acc[key] = "0"; // Reset numeric fields as strings
-    } else {
-      acc[key] = ""; // Reset other fields to empty strings
-    }
-    return acc;
-  }, {} as FormValues);
+    // Reset the form
+    const resetValues = Object.keys(formData).reduce((acc, key) => {
+      if (key.startsWith("exercise_") && key.includes("_selected")) {
+        acc[key] = false as unknown as string; // Cast boolean to string for TypeScript compatibility
+      } else if (
+        key.startsWith("exercise_") &&
+        (key.includes("_reps") || key.includes("_sets"))
+      ) {
+        acc[key] = "0"; // Reset numeric fields as strings
+      } else {
+        acc[key] = ""; // Reset other fields to empty strings
+      }
+      return acc;
+    }, {} as FormValues);
 
-  form.reset(resetValues);
+    form.reset(resetValues);
   };
 
   if (error) {
@@ -183,7 +181,10 @@ export default function AddExerciseReps({
               <div className="flex flex-row items-center justify-center flex-wrap gap-4">
                 {data?.exercises &&
                   data.exercises.map((exercise) => (
-                    <div key={exercise.id} className="flex flex-row items-center justify-center">
+                    <div
+                      key={exercise.id}
+                      className="flex flex-row items-center justify-center"
+                    >
                       <FormField
                         control={form.control}
                         name={`exercise_${exercise.id}_selected`}
@@ -202,7 +203,7 @@ export default function AddExerciseReps({
                               <div className="flex flex-col items-center justify-center border border-muted rounded-md p-2 w-56 gap-2">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
-                                  className="w-56 h-40 object-cover rounded-md border border-muted"
+                                  className="w-[200px] h-[200px] object-cover rounded-md border border-muted"
                                   src={exercise.gif}
                                   alt={exercise.name + " gif"}
                                 />
@@ -255,23 +256,16 @@ export default function AddExerciseReps({
                   ))}
               </div>
             )}
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                refetch();
-              }}
-              className="flex flex-row gap-2 items-center"
-            >
-              <Input
-                placeholder="Search: Triceps pushdown"
-                onChange={(value) => setQuery(value.target.value)}
-                value={query}
-              />
-              <Button type="button" onClick={() => refetch()}>
-                <Search />
-              </Button>
-            </form>
+            <div className="flex flex-row gap-2 items-center justify-center">
+            <Input
+              placeholder="Search: Triceps pushdown"
+              onChange={(value) => setQuery(value.target.value)}
+              value={query}
+            />
+            <Button type="button" onClick={() => refetch()}>
+              <Search />
+            </Button>
+            </div>
             {data?.maxPages && (
               <Pagination>
                 <PaginationContent>
