@@ -19,9 +19,10 @@ Go-Gym is a gym management app where gym admins can create gyms, manage plans, e
 - **React Query** (data fetching)
 - **Zod** (validation)
 ## Screen shots:
-<img src="./assets/ss1.png" alt="Gym Logo" width="300"/>
-<img src="./assets/ss2.png" alt="Gym Logo" width="300"/>
-<img src="./assets/ss3.png" alt="Gym Logo" width="300"/>
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/landing-page-ss.png" alt="Gym Logo" width="600"/>
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss1.png" alt="Gym Logo" width="300"/>
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss2.png" alt="Gym Logo" width="300"/>
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss3.png" alt="Gym Logo" width="600"/>
 
 ## Todo
 - [x] catch error in register and send a toast when it occurs
