@@ -37,11 +37,11 @@ export default function Page() {
         exit="hide"
         variants={introPictureVariants}
       >
-        <div className="flex lg:absolute bottom-96">
+        <div className="flex lg:absolute mt-0 lg:mt-44">
           <div className="flex flex-col lg:flex-row items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className=" w-52  lg:w-96"
+              className="w-56 lg:w-96"
               src="/strongGopher.png"
               alt="Gym Logo"
             />
@@ -94,7 +94,7 @@ export default function Page() {
             whileInView="show"
             exit="hide"
             variants={introHowItWorksVariants}
-            className="flex flex-col items-center justify-center border rounded-md border-muted p-4 gap-2 lg:w-[600px] shadow-lg shadow-foreground/5"
+            className="flex flex-col items-center justify-center border rounded-md border-muted p-4 gap-2  shadow-lg shadow-foreground/5"
           >
             <h1
               className={
@@ -115,7 +115,7 @@ export default function Page() {
             whileInView="show"
             exit="hide"
             variants={introHowItWorksVariants}
-            className="flex flex-col items-center border rounded-md border-muted p-4 gap-2 lg:w-[600px] shadow-lg shadow-foreground/5"
+            className="flex flex-col items-center border rounded-md border-muted p-4 gap-2  shadow-lg shadow-foreground/5"
           >
             <h1
               className={
