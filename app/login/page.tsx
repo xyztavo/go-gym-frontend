@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { useMutation } from "@tanstack/react-query";
+import ErrorDiv from "@/components/error";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,11 +34,13 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
+  const authToken = getCookie("auth");
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({
@@ -96,6 +99,9 @@ export default function ProfileForm() {
     
     mutate({ email: values.email, password: values.password });
   }
+
+  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />
+
   return (
     <div className="flex flex-col justify-center items-center my-4">
       <h1 className="text-xl font-bold">Log in to your account:</h1>

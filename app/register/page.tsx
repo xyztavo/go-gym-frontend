@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import ErrorDiv from "@/components/error";
 
 const formSchema = z.object({
   name: z.string().min(5, {
@@ -37,6 +38,7 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
   const router = useRouter();
+  const authToken = getCookie("auth");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,6 +95,9 @@ export default function ProfileForm() {
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     mutate(values);
   }
+
+  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />
+   
   return (
     <div className="flex flex-col justify-center items-center my-4">
         <h1 className="text-xl font-bold">Create your account:</h1>
