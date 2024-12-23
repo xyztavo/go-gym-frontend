@@ -4,7 +4,7 @@ import { baseUrlRoute } from "@/api/lib/routes";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -63,25 +63,15 @@ export default function Page() {
       return res.data;
     },
     onSuccess: (data) => {
-      toast({
-        title: data.message,
-      });
+      toast(data.message);
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode === 401) {
-          toast({
-            title: "Unauthorized",
-            description: "You are not authorized to access this page",
-            variant: "destructive",
-          });
+          toast.error("You are not authorized to access this page");
         } else {
-          toast({
-            title: e.response.data,
-            description: "Something went wrong",
-            variant: "destructive",
-          });
+          toast.error(e.response.data);
         }
       }
     },
@@ -91,17 +81,9 @@ export default function Page() {
     if (isAxiosError(error) && error.response) {
       const statusCode = error.response.status;
       if (statusCode === 401) {
-        toast({
-          title: "Unauthorized",
-          description: "You are not authorized to access this page",
-          variant: "destructive",
-        });
+        toast.error("You are not authorized to access this page");
       } else {
-        toast({
-          title: error.response.data,
-          description: "Something went wrong",
-          variant: "destructive",
-        });
+        toast.error(error.response.data);
       }
     }
   }

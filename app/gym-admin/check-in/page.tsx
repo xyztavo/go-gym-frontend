@@ -1,7 +1,7 @@
 "use client";
 
 import { baseUrlRoute } from "@/api/lib/routes";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -26,23 +26,14 @@ export default function Page() {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode === 401) {
-          toast({
-            variant: "destructive",
-            title: "User is not admin",
-          });
+          toast.error("User is not admin");
         } else {
-          toast({
-            variant: "destructive",
-            title: e.response.data,
-          });
+         toast.error("destructive")
         }
       }
     },
     onSuccess: (data) => {
-      toast({
-        title: "Check-in successful",
-        description: `Days until plan expires: ${data.daysUntilPlanExpires}`,
-      });
+      toast.error(`Days until plan expires: ${data.daysUntilPlanExpires}`)
     },
     retry: false,
   });

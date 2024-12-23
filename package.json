@@ -27,12 +27,13 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.454.0",
     "next": "^15.1.1-canary.13",
-    "next-themes": "^0.3.0",
+    "next-themes": "^0.4.4",
     "qrcode.react": "^4.1.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.1",
     "react-qr-code": "^2.0.15",
+    "sonner": "^1.7.1",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
@@ -40,14 +41,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.16",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.16"
+    "typescript": "^5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

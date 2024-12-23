@@ -4,7 +4,7 @@ import { baseUrlRoute } from "@/api/lib/routes";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -63,26 +63,19 @@ export default function AddCollectionToRoutine({routineId, refetchCollections} :
 
   if (mutateError) {
     if (isAxiosError(mutateError) && mutateError.response) {
-        toast({
-            title: mutateError.message
-        })
+        toast.error(mutateError.message)
     }
   }
 
   if (isAxiosError(error) && error.response) {
     const statusCode = error.status;
     if (statusCode == 404) {
-      toast({
-        title: error.message,
-      });
+      toast.error(error.message);
     } else {
-      toast({
-        title: error.message,
-      });
+      toast.error(error.message);
     }
   }
 
-  if (isLoading) return <Loader />;
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 m-2 p-2 ">
@@ -90,6 +83,7 @@ export default function AddCollectionToRoutine({routineId, refetchCollections} :
         Select a collection to add to the routine:
       </h1>
       <div className="flex flex-row flex-wrap items-center justify-center gap-2 p-2 border border-muted rounded-md">
+        {isLoading && <Loader />}
         {data && (
           <>
             {data.collections ?

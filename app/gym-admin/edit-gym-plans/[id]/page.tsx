@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z
@@ -102,20 +102,14 @@ export default function Page() {
     },
     onSuccess: () => {
       form.reset();
-      toast({
-        title: "Plan updated successfully!",
-      });
+      toast("Plan updated successfully!");
       refetch();
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
-        toast({
-          title: e.response.data.message,
-        });
+        toast.error(e.response.data)
       }
-      toast({
-        title: "Error updating plan.",
-      });
+      toast("Error updating plan.");
     },
   });
 

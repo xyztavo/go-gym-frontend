@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { isAxiosError } from "axios";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z
@@ -57,24 +57,16 @@ export default function Page() {
       return res.data;
     },
     onSuccess: () => {
-      toast({
-        title: `User with email ${form.getValues("email")} is now a gym user!`,
-      });
+      toast(`User with email ${form.getValues("email")} is now a gym user!`);
       form.reset();
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode === 401) {
-          toast({
-            variant: "destructive",
-            title: "User is not admin",
-          });
+          toast.error("User is not admin");
         } else {
-          toast({
-            variant: "destructive",
-            title: e.response.data,
-          });
+          toast.error(e.response.data);
         }
       }
     },

@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { getCookie } from "cookies-next";
 import { Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -115,17 +115,12 @@ export default function Page() {
       return res.data;
     },
     onSuccess: async () => {
-      toast({
-        title: "Gym updated successfully!",
-      });
+      toast("Gym updated successfully!")
       await refetch();
     },
     onError: (e) => {
-      if (isAxiosError(e)) {
-        toast({
-          title: e.response?.data.message,
-          variant: "destructive",
-        });
+      if (isAxiosError(e) && e.response) {
+        toast.error(e.response.data)
       }
     },
   });
@@ -143,18 +138,13 @@ export default function Page() {
       return res.data;
     },
     onSuccess: () => {
-      toast({
-        title: "Gym created successfully!",
-      });
+      toast("Gym created successfully!");
       refetch();
       form.reset();
     },
     onError: (e) => {
-      if (isAxiosError(e)) {
-        toast({
-          title: e.response?.data.message,
-          variant: "destructive",
-        });
+      if (isAxiosError(e) && e.response) {
+        toast.error(e.response.data);
       }
     },
   });

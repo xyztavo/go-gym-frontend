@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { getCookie } from "cookies-next";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -104,24 +104,16 @@ export default function Page() {
       return res.data;
     },
     onSuccess: (data) => {
-      toast({
-        title: data.message,
-      });
+      toast(data.message);
       refetch();
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode == 404) {
-          toast({
-            variant: "destructive",
-            title: "user gym not found",
-          });
+          toast.error("user gym not found");
         } else {
-          toast({
-            variant: "destructive",
-            title: e.response.data,
-          });
+          toast.error("could not delete plan, reason :" + e.response.data);
         }
       }
     },
@@ -148,24 +140,16 @@ export default function Page() {
       return res.data;
     },
     onSuccess: (data) => {
-      toast({
-        title: data.message,
-      });
+      toast(data.message);
       refetch();
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode == 404) {
-          toast({
-            variant: "destructive",
-            title: "user gym not found",
-          });
+          toast.error("user gym not found");
         } else {
-          toast({
-            variant: "destructive",
-            title: "could not create gym plan, reason : " + e.response.data,
-          });
+          toast.error("could not create gym plan, reason : " + e.response.data)
         }
       }
     },

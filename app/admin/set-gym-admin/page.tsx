@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { baseUrlRoute } from "@/api/lib/routes";
 
 const formSchema = z.object({
@@ -42,31 +42,19 @@ export default function Page() {
         },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
-      toast({
-        title: `user with email ${values.email} is now a gym admin`,
-      });
+      toast(`user with email ${values.email} is now a gym admin`);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 401) {
-          toast({
-            variant: "destructive",
-            title: `Password does not match`,
-          });
+          toast.error(`Password does not match`);
         }
         if (statusCode == 404) {
-          toast({
-            variant: "destructive",
-            title: `User with email ${values.email} does not exists`,
-          });
+          toast.error(`User with email ${values.email} does not exists`);
         }
       } else {
-        // Handle other types of errors (like network errors)
-        toast({
-          variant: "destructive",
-          title: "An unexpected error occurred.",
-        });
+        toast.error("An unexpected error occurred.")
       }
     }
   }

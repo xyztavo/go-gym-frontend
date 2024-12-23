@@ -12,14 +12,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { getCookie } from "cookies-next";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
+import  { isAxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z
@@ -52,8 +52,7 @@ export default function Page() {
   type Response = {
     message: string;
   };
-  const [data, setData] = useState<Response>();
-  const [isLoading, setIsLoading] = useState(false);
+
 
   const authToken = getCookie("auth");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,10 +60,9 @@ export default function Page() {
     defaultValues: {},
   });
 
-  async function OnSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    baseUrlRoute
-      .post(
+  const { mutate, isPending } = useMutation<Response, Error, { values: z.infer<typeof formSchema>}>({
+    mutationFn: async ({ values } : { values: z.infer<typeof formSchema>}) => {  
+      const res = await baseUrlRoute.post(
         "/collections",
         {
           name: values.name,
@@ -72,35 +70,28 @@ export default function Page() {
           img: values.imageUrl,
         },
         { headers: { Authorization: `Bearer ${authToken}` } }
-      )
-      .then((res) => {
-        setIsLoading(false);
-        setData(res.data);
-      })
-      .catch((e) => {
-        if (axios.isAxiosError(e) && e.response) {
-            const statusCode = e.response.status;
-            if (statusCode == 404) {
-              toast({
-                variant: "destructive",
-                title: "user gym not found",
-              });
-            } else {
-              toast({
-                variant: "destructive",
-                title: "could not create gym plan, reason : " + e.response.data,
-              });
-            }
-            setIsLoading(false);
-        }});
-  }
-  useEffect(() => {
-    if (data) {
-        toast({
-          title: data.message,
-        });
+      );
+      return res.data;
+    },
+    onSuccess: (data) => {
+      toast(data.message);
+    },
+    onError: (e) => {
+      if (isAxiosError(e) && e.response) {
+        const statusCode = e.response.status;
+        if (statusCode === 401) {
+          toast.error("User is not admin");
+        } else {
+         toast.error(e.response.data)
+        }
       }
-  }, [data]);
+    },
+  });
+
+  async function OnSubmit(values: z.infer<typeof formSchema>) {
+   mutate({values})
+  }
+
   return (
     <div className="flex flex-col justify-center items-center my-4">
       <h1 className="text-1xl font-bold">Create Collection:</h1>
@@ -157,8 +148,8 @@ export default function Page() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && <Loader2 className="animate-spin" />}Submit
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="animate-spin" />}Submit
             </Button>
           </form>
         </Form>

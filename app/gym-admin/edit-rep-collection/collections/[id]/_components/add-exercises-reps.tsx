@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import {
@@ -103,16 +103,14 @@ export default function AddExerciseReps({
     },
     onSuccess: () => {
       refetchExercisesCollection();
-      toast({
-        title: "Exercises Updated",
-        description: "Your exercises were successfully updated.",
-      });
+      toast("Exercises Updated");
     },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "There was an error updating the exercises.",
-      });
+    onError: (e) => {
+      if (isAxiosError(e) && e.response) {
+        toast.error(e.response.data);
+      } else {
+        toast.error("There was an error updating the exercises.");
+      }
     },
   });
 
@@ -257,14 +255,14 @@ export default function AddExerciseReps({
               </div>
             )}
             <div className="flex flex-row gap-2 items-center justify-center">
-            <Input
-              placeholder="Search: Triceps pushdown"
-              onChange={(value) => setQuery(value.target.value)}
-              value={query}
-            />
-            <Button type="button" onClick={() => refetch()}>
-              <Search />
-            </Button>
+              <Input
+                placeholder="Search: Triceps pushdown"
+                onChange={(value) => setQuery(value.target.value)}
+                value={query}
+              />
+              <Button type="button" onClick={() => refetch()}>
+                <Search />
+              </Button>
             </div>
             {data?.maxPages && (
               <Pagination>

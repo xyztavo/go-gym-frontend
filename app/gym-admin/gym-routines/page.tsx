@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
 import AddGymRoutine from "./_components/page";
 import Loader from "@/components/loader";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2, Trash2 } from "lucide-react";
 import { isAxiosError } from "axios";
@@ -33,13 +33,9 @@ export default function Page() {
     },
     onError: (e) => {
       if (isAxiosError(e) && e.response) {
-        toast({
-          title: e.message,
-        });
+        toast.error(e.response.data);
       } else {
-        toast({
-          title: e.message,
-        });
+        toast.error(e.message);
       }
     },
   });

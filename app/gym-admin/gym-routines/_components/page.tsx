@@ -4,7 +4,7 @@ import { baseUrlRoute } from "@/api/lib/routes";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -34,8 +34,11 @@ type Routine = {
   img: string;
 };
 
-
-export default function AddGymRoutine({ refetchRoutines } : { refetchRoutines: () => void}) {
+export default function AddGymRoutine({
+  refetchRoutines,
+}: {
+  refetchRoutines: () => void;
+}) {
   const authToken = getCookie("auth");
 
   const [query, setQuery] = useState("");
@@ -57,43 +60,35 @@ export default function AddGymRoutine({ refetchRoutines } : { refetchRoutines: (
     },
   });
 
-    const {
-      mutate,
-      error: mutateError,
-      isPending,
-    } = useMutation({
-      mutationFn: async ({ routineId }: { routineId: string }) => {
-        const res = await baseUrlRoute.post(
-          `/gym/routines/${routineId}`,
-          {},
-          { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-        return res.data;
-      }, onSuccess: () => refetchRoutines()
-    });
-    if (mutateError) {
-        if (isAxiosError(mutateError) && mutateError.response) {
-          toast({
-            title: mutateError.message,
-          });
-        }
-      }
-
-  
-  if (isAxiosError(error) && error.response) {
-    const statusCode = error.status;
-    if (statusCode == 404) {
-      toast({
-        title: error.message,
-      });
-    } else {
-      toast({
-        title: error.message,
-      });
+  const {
+    mutate,
+    error: mutateError,
+    isPending,
+  } = useMutation({
+    mutationFn: async ({ routineId }: { routineId: string }) => {
+      const res = await baseUrlRoute.post(
+        `/gym/routines/${routineId}`,
+        {},
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      return res.data;
+    },
+    onSuccess: () => refetchRoutines(),
+  });
+  if (mutateError) {
+    if (isAxiosError(mutateError) && mutateError.response) {
+      toast.error(mutateError.message);
     }
   }
 
-  if (isLoading) return <Loader />;
+  if (isAxiosError(error) && error.response) {
+    const statusCode = error.status;
+    if (statusCode == 404) {
+      toast.error(error.message);
+    } else {
+      toast.error(error.message);
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 m-2 p-2 ">
@@ -101,6 +96,7 @@ export default function AddGymRoutine({ refetchRoutines } : { refetchRoutines: (
         Select a routine to add to the gym:
       </h1>
       <div className="flex flex-row flex-wrap items-center justify-center gap-2 p-2 border border-muted rounded-md">
+        {isLoading && <Loader />}
         {data && (
           <>
             {data.routines ? (

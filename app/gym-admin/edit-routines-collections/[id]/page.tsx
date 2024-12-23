@@ -2,7 +2,7 @@
 
 import { baseUrlRoute } from "@/api/lib/routes";
 import Loader from "@/components/loader";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -37,15 +37,9 @@ export default function Page() {
       if (isAxiosError(e) && e.response) {
         const statusCode = e.response.status;
         if (statusCode === 401) {
-          toast({
-            variant: "destructive",
-            title: "User is not admin",
-          });
+          toast.error("User is not admin");
         } else {
-          toast({
-            variant: "destructive",
-            title: e.response.data,
-          });
+          toast.error(e.response.data);
         }
       }
     },
@@ -64,13 +58,9 @@ export default function Page() {
   });
   if (isAxiosError(error) && error.response) {
     if ((error.status = 404)) {
-      toast({
-        title: error.message,
-      });
+      toast(error.message);
     } else {
-      toast({
-        title: error.message,
-      });
+      toast(error.message);
     }
   }
 

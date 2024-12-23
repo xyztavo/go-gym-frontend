@@ -3,7 +3,7 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import React from "react";
 import ReactQueryProvider from "@/utils/react-query-provider";
 
@@ -31,9 +31,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar />
+            <Navbar />  
             {children}
-            <Toaster />
+            <Toaster richColors/>
           </ThemeProvider>
         </body>
       </ReactQueryProvider>

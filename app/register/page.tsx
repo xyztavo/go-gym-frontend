@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { getCookie, setCookie } from "cookies-next";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { Loader2 } from "lucide-react";
@@ -63,7 +63,7 @@ export default function ProfileForm() {
       });
       const authToken = res.data.token;
       setCookie("auth", authToken);
-      toast({ title: "User created with ease!" });
+      toast("User created with ease!");
       router.push("/user");
       router.refresh();
     }, onError: (error) => {
@@ -71,23 +71,13 @@ export default function ProfileForm() {
         // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 500) {
-          toast({
-            variant: "destructive",
-            title: `Error reason: ${error.response.data}`,
-          });
+          toast.error(`Error reason: ${error.response.data}`);
         }
         if (statusCode == 409) {
-          toast({
-            variant: "destructive",
-            title: `User email already in use`,
-          });
+          toast.error(`User email already in use`);
         }
       } else {
-        // Handle other types of errors (like network errors)
-        toast({
-          variant: "destructive",
-          title: "An unexpected error occurred.",
-        });
+        toast.error("An unexpected error occurred.");
       }
     }
   })
