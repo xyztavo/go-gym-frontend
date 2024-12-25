@@ -11,9 +11,9 @@ export default function Page() {
         </Button>
       </div>
       <h1 className="text-xl font-semibold">Global:</h1>
-        <div className="flex flex-row flex-wrap items-center justify-center gap-4">
+        <div className="flex flex-row flex-wrap items-center border border-muted rounded-md p-2 justify-center gap-4">
           <Button variant={"outline"} asChild>
-            <Link href={"/gym-admin/create-exercise"}>Create Exercise</Link>
+            <Link href={"/gym-admin/edit-exercise"}>Edit Exercise</Link>
           </Button>
           <Button variant={"outline"} asChild>
             <Link href={"/gym-admin/edit-collection"}>Edit Collection</Link>
