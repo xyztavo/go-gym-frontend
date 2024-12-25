@@ -22,6 +22,7 @@ import axios, { isAxiosError } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Loader from "@/components/loader";
 import ErrorDiv from "@/components/error";
+import Link from "next/link";
 
 // Define schema for form validation using zod
 const formSchema = z.object({
@@ -137,7 +138,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center my-4">
+    <div className="flex flex-col justify-center items-center my-4 gap-2">
       <h1 className="text-1xl font-bold">User Routines:</h1>
       <div className="flex flex-row flex-wrap gap-2 border p-2 border-muted rounded-md">
         {error && <ErrorDiv error={error.message} statusCode={500} />}
@@ -146,43 +147,36 @@ export default function Page() {
           data.map((routine) => (
             <div
               key={routine.id}
-              className="flex flex-col gap-2 p-2 border border-muted rounded-md bg-background"
+              className="flex flex-col items-center justify-center gap-2 p-2 border border-muted rounded-md bg-background"
             >
-              <div className="absolute flex flex-row gap-10 justify-between">
+              <div className="absolute flex flex-row justify-between mt-[-14rem] gap-28">
+                <Button className="border-2 border-muted" variant={"outline"} size={"icon"} asChild>
+                  <Link href={`/gym-admin/edit-routines/${routine.id}`}>
+                    <Pen />
+                  </Link>
+                </Button>
                 <Button
                   variant={"destructive"}
                   size={"icon"}
-                  className="z-50 m-1 border-2 border-muted"
-                  disabled={isDeletePending}
+                  className="border-2 border-muted"
                   onClick={() => mutateDelete({ id: routine.id })}
+                  disabled={isDeletePending}
                 >
                   <Trash2 />
-                </Button>
-                <Button
-                  variant={"outline"}
-                  size={"icon"}
-                  className="z-50 m-1 border-2 border-muted"
-                  disabled={isDeletePending}
-                  asChild
-                >
-                  <a href={`/gym-admin/edit-routines/${routine.id}`}>
-                    {" "}
-                    <Pen />
-                  </a>
                 </Button>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                className="w-32 h-32 object-cover border border-muted rounded-md"
+                className="w-48 h-48 rounded-md border border-muted object-cover"
                 src={routine.img}
-                alt={routine.name}
+                alt={`${routine.name} img`}
               />
-              <h1 className="text-sm font-bold w-32 h-7 overflow-auto">
+              <h1 className="w-48 h-7 overflow-auto text-lg font-bold">
                 {routine.name}
               </h1>
-              <p className="text-xs w-32 h-7 overflow-auto">
+              <h1 className="w-48 h-7 overflow-auto text-sm">
                 {routine.description}
-              </p>
+              </h1>
             </div>
           ))}
       </div>

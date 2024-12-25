@@ -55,7 +55,7 @@ type Res = {
   img: string;
 };
 
-export default function EditRoutine({
+export default function EditCollection({
   data,
   refetch,
   id,
@@ -77,7 +77,7 @@ export default function EditRoutine({
     { values: z.infer<typeof formSchema> }
   >({
     mutationFn: async ({ values }: { values: z.infer<typeof formSchema> }) => {
-      const res = await baseUrlRoute.put(`/routines/${id}`, values, {
+      const res = await baseUrlRoute.put(`/collections/${id}`, values, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       return res.data;
@@ -92,7 +92,7 @@ export default function EditRoutine({
         if (statusCode === 404) {
           toast.error("user gym not found");
         } else {
-          toast.error("could not create routine, reason :" + e.response.data);
+          toast.error("could not create collection, reason :" + e.response.data);
         }
       }
     },
@@ -114,9 +114,9 @@ export default function EditRoutine({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Waltuh Gym" {...field} />
+                  <Input placeholder="Arm Day" {...field} />
                 </FormControl>
-                <FormDescription>The gym name</FormDescription>
+                <FormDescription>The collection name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -129,9 +129,9 @@ export default function EditRoutine({
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input placeholder="this gym very cool..." {...field} />
+                  <Input placeholder="Arm Day" {...field} />
                 </FormControl>
-                <FormDescription>The gym description</FormDescription>
+                <FormDescription>The collection description</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -150,7 +150,7 @@ export default function EditRoutine({
                   />
                 </FormControl>
                 <FormDescription>
-                  Gym url logo (if possible a square one)
+                  Collection image (if possible a square one)
                 </FormDescription>
                 <FormMessage />
               </FormItem>

@@ -16,7 +16,7 @@ export default function Page() {
             <Link href={"/gym-admin/create-exercise"}>Create Exercise</Link>
           </Button>
           <Button variant={"outline"} asChild>
-            <Link href={"/gym-admin/create-collection"}>Edit Collection</Link>
+            <Link href={"/gym-admin/edit-collection"}>Edit Collection</Link>
           </Button>
           <Button variant={"outline"} asChild>
             <Link href={"/gym-admin/edit-rep-collection/collections"}>
