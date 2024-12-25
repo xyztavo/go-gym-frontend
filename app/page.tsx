@@ -30,7 +30,7 @@ export default function Page() {
   };
 
   return (
-    <div className={jetBrains_Mono.className}>
+    <div className={`${jetBrains_Mono.className} overflow-x-hidden`}>
       <motion.div
         initial="hide"
         whileInView="show"
