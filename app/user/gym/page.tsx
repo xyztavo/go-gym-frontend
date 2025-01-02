@@ -2,6 +2,7 @@
 
 import { baseUrlRoute } from "@/api/lib/routes";
 import ErrorDiv from "@/components/error";
+import { GymDetailsResponse } from "@/types/api-types";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { getCookie } from "cookies-next";
@@ -16,30 +17,7 @@ const formatter = new Intl.NumberFormat("en-US", {
 
 export default function Page() {
   const authToken = getCookie("auth");
-  type Response = {
-    name: string;
-    description: string;
-    location: string;
-    number: string;
-    image: string;
-    plans: Plan[];
-    routines: Routine[];
-  };
-  type Plan = {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    duration: number;
-    img: string;
-  };
-  type Routine = {
-    id: string;
-    name: string;
-    description: string;
-    img: string;
-  };
-  const { data, error, isLoading } = useQuery<Response>({
+  const { data, error, isLoading } = useQuery<GymDetailsResponse>({
     queryKey: ["gym"],
     queryFn: async () => {
       const res = await baseUrlRoute.get("/user/gym/details", {
