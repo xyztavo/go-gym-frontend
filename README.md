@@ -53,5 +53,6 @@ Go-Gym is a gym management app where gym admins can create gyms, manage plans, e
 - - [x] update n delete routines
 - - [x] update n delete collections
 - - [x] update n delete exercise (require backend refactor)
+- [ ] better ui to /user [50% done] (maybe also fetch the user gym details there)
 - [ ] ui looks like absolute shit and inconsistent [50% done]
 
