@@ -151,7 +151,7 @@ export default function Page() {
         {error && <ErrorDiv error={error.message} statusCode={500} />}
         {isLoading && <Loader />}
         {!data && !isLoading && (
-          <ErrorDiv error="No user collections" statusCode={404} />
+          <ErrorDiv error="No user collections found" statusCode={404} />
         )}
         {data &&
           data.map((collection) => (

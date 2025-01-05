@@ -142,6 +142,9 @@ export default function Page() {
       <h1 className="text-1xl font-bold">User Routines:</h1>
       <div className="flex flex-row flex-wrap gap-2 border p-2 border-muted rounded-md">
         {error && <ErrorDiv error={error.message} statusCode={500} />}
+        {!data && !isLoading && (
+          <ErrorDiv error="No user routines found" statusCode={404} />
+        )}
         {isLoading && <Loader />}
         {data &&
           data.map((routine) => (
@@ -150,7 +153,12 @@ export default function Page() {
               className="flex flex-col items-center justify-center gap-2 p-2 border border-muted rounded-md bg-background"
             >
               <div className="absolute flex flex-row justify-between mt-[-14rem] gap-28">
-                <Button className="border-2 border-muted" variant={"outline"} size={"icon"} asChild>
+                <Button
+                  className="border-2 border-muted"
+                  variant={"outline"}
+                  size={"icon"}
+                  asChild
+                >
                   <Link href={`/gym-admin/edit-routines/${routine.id}`}>
                     <Pen />
                   </Link>

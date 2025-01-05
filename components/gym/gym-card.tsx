@@ -33,7 +33,7 @@ function GymCard() {
     <div className="flex flex-col justify-center items-center gap-2">
       {isLoading && <Loader />}
       {!isLoading && error && (
-        <ErrorDiv error={error.message} statusCode={500} />
+        <ErrorDiv error={"User does not have a gym"} statusCode={404} />
       )}
       {data?.name == "" && !isLoading && !error && (
         <ErrorDiv error={"User does not have a gym"} statusCode={404} />
