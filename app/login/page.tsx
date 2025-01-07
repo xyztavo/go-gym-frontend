@@ -41,7 +41,6 @@ export default function ProfileForm() {
     defaultValues: {},
   });
 
-
   const { mutate, isPending } = useMutation({
     mutationFn: async ({
       email,
@@ -55,23 +54,22 @@ export default function ProfileForm() {
         password: password,
       });
       const authToken = res.data.token;
-      setCookie("auth", authToken);
-      toast("User logged in!");
       const role = res.data.role;
+      setCookie("auth", authToken);
+      setCookie("role", role); // Save the role in a cookie
+      toast("User logged in!");
+
       if (role == "regular") {
         router.push("/user");
-        router.refresh();
       } else if (role == "admin") {
         router.push("/admin");
-        router.refresh();
       } else if (role == "gym-admin") {
         router.push("/gym-admin");
-        router.refresh();
       }
+      router.refresh();
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
-        // Handle known errors returned by the server
         const statusCode = error.response.status;
         if (statusCode == 401) {
           toast.error(`Password does not match`);
@@ -89,7 +87,7 @@ export default function ProfileForm() {
     mutate({ email: values.email, password: values.password });
   }
 
-  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />
+  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />;
 
   return (
     <div className="flex flex-col justify-center items-center my-4">

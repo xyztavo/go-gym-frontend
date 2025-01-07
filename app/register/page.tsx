@@ -46,6 +46,7 @@ export default function ProfileForm() {
       name: "",
     },
   });
+
   const { mutate, isPending } = useMutation({
     mutationFn: async ({
       name,
@@ -62,35 +63,38 @@ export default function ProfileForm() {
         password: password,
       });
       const authToken = res.data.token;
+
       setCookie("auth", authToken);
+      setCookie("role", "regular");
+
       toast("User created with ease!");
       router.push("/user");
       router.refresh();
-    }, onError: (error) => {
+    },
+    onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
-        // Handle known errors returned by the server
         const statusCode = error.response.status;
-        if (statusCode == 500) {
+        if (statusCode === 500) {
           toast.error(`Error reason: ${error.response.data}`);
         }
-        if (statusCode == 409) {
+        if (statusCode === 409) {
           toast.error(`User email already in use`);
         }
       } else {
         toast.error("An unexpected error occurred.");
       }
-    }
-  })
+    },
+  });
 
   async function OnSubmit(values: z.infer<typeof formSchema>) {
     mutate(values);
   }
 
-  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />
-   
+  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />;
+
   return (
     <div className="flex flex-col justify-center items-center my-4">
-        <h1 className="text-xl font-bold">Create your account:</h1>
+      <h1 className="text-xl font-bold">Create your account:</h1>
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
@@ -136,7 +140,13 @@ export default function ProfileForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isPending} className="flex flex-row items-center justify-center">{isPending && <Loader2 className="animate-spin" />}Submit</Button>
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="flex flex-row items-center justify-center"
+            >
+              {isPending && <Loader2 className="animate-spin" />}Submit
+            </Button>
           </form>
         </Form>
       </div>

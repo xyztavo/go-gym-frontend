@@ -11,11 +11,27 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { deleteCookie, getCookie } from "cookies-next";
+import { CookieValueTypes, deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+
 export function Navbar() {
   const authToken = getCookie("auth");
-  const router = useRouter()
+  const userRole = getCookie("role"); // Assuming the role is stored in a cookie named "role"
+  const router = useRouter();
+
+  const getRedirectPath = (role: CookieValueTypes) => {
+    switch (role) {
+      case "regular":
+        return "/user";
+      case "admin":
+        return "/admin";
+      case "gym-admin":
+        return "/gym-admin";
+      default:
+        return "/";
+    }
+  };
+
   return (
     <div className="flex justify-between items-center border-b border-muted p-2">
       <Button
@@ -24,16 +40,17 @@ export function Navbar() {
         size={"lg"}
         asChild
       >
-        <Link href={"/"}>
+        <Link href={authToken ? getRedirectPath(userRole) : "/"}>
           <BicepsFlexed />
           Go Gym
         </Link>
       </Button>
-      {authToken != null ?(
+      {authToken != null ? (
         <Button onClick={() => {
-          deleteCookie("auth")
-          router.push("/")
-          router.refresh()
+          deleteCookie("auth");
+          deleteCookie("role"); // Clear role cookie as well
+          router.push("/");
+          router.refresh();
         }}>Log out</Button>
       ) : (
         <div>
