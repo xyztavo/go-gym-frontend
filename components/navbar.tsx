@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
@@ -46,15 +46,54 @@ export function Navbar() {
         </Link>
       </Button>
       {authToken != null ? (
-        <Button onClick={() => {
-          deleteCookie("auth");
-          deleteCookie("role"); // Clear role cookie as well
-          router.push("/");
-          router.refresh();
-        }}>Log out</Button>
+        <div>
+          <div className="hidden md:flex flex-row justify-center items-center gap-4">
+            <Button
+              onClick={() => {
+                deleteCookie("auth");
+                deleteCookie("role"); // Clear role cookie as well
+                router.push("/");
+                router.refresh();
+              }}
+            >
+              Log out
+            </Button>
+            <ModeToggle />
+          </div>
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size={"icon"} variant={"secondary"}>
+                  <Menu />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div className="flex flex-col gap-2">
+                  <DropdownMenuItem asChild>
+                    <Button
+                      onClick={() => {
+                        deleteCookie("auth");
+                        deleteCookie("role"); // Clear role cookie as well
+                        router.push("/");
+                        router.refresh();
+                      }}
+                    >
+                      Log out
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <ModeToggle />
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
       ) : (
         <div>
-          <div className="xl:hidden md:hidden">
+          <div className="md:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size={"icon"} variant={"secondary"}>
