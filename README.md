@@ -24,35 +24,20 @@ Go-Gym is a gym management app where gym admins can create gyms, manage plans, e
 <img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss2.png" alt="Gym Logo" width="300"/>
 <img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss3.png" alt="Gym Logo" width="600"/>
 
+
+## Usage
+- change [env](https://github.com/xyztavo/go-gym-frontend/blob/main/.env) to .env.local
+- change the base url route to yours 
+```sh
+NEXT_PUBLIC_API_BASE_URL="http://localhost:8000/"
+```
+- you gotta have a backend running for the app to work,
+instructions in [go-gym](https://github.com/xyztavo/go-gym) github repo
+- run a dev server and test it out
+```sh
+bun dev
+```
 ## Todo
-- [x] catch error in register and send a toast when it occurs
-- [x] log in 
-- [x] set user gym admin 
-- [x] gym admin can create gyms
-- [x] 50% done, need to get plans and routines, in /user, GET /user/gym/details
-- [x] gym admins can create plans
-- [x] admins or gym admins can create exercise
-- [X] get exercises
-- [x] admins or gym admins can create exercise-reps
-- [x] get exercises-reps
-- [x] admins or gym admins can create collections
-- [x] admins or gym admins can create routines
-- [x] get collections
-- [x] get routines route
-- [x] gym admins can add gym-routines
-- [x] gym admins can set user plans
-- [x] user can check in generating a qr code
-- [x] gym admin can read the qrcode and check in user
-- [x] gym admin can also delete and update stuff 
-- - [x] update gym
-- - [x] delete exercises-reps-collections
-- - [x] delete routines-collections 
-- - [x] delete plans
-- - [x] update plans
-- - [x] delete gym routines
-- - [x] update n delete routines
-- - [x] update n delete collections
-- - [x] update n delete exercise (require backend refactor)
-- [x] better ui to /user [50% done] (maybe also fetch the user gym details there)
 - [ ] ui looks like absolute shit and inconsistent [80% done]
+- [ ] some hydration errors that will prob never be fixed, its already supressed in prod.
 

@@ -22,7 +22,6 @@ import { useRouter } from "next/navigation";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { Loader2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import ErrorDiv from "@/components/error";
 
 const formSchema = z.object({
   name: z.string().min(5, {
@@ -90,7 +89,7 @@ export default function ProfileForm() {
     mutate(values);
   }
 
-  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />;
+  if (authToken) return <div>Already logged in.</div>;
 
   return (
     <div className="flex flex-col justify-center items-center my-4">

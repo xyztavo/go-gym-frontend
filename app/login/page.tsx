@@ -22,7 +22,6 @@ import { useRouter } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { baseUrlRoute } from "@/api/lib/routes";
 import { useMutation } from "@tanstack/react-query";
-import ErrorDiv from "@/components/error";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -87,7 +86,7 @@ export default function ProfileForm() {
     mutate({ email: values.email, password: values.password });
   }
 
-  if (authToken) return <ErrorDiv error="You are already logged in" statusCode={403} />;
+  if (authToken) return <div>Already logged in.</div>;
 
   return (
     <div className="flex flex-col justify-center items-center my-4">
