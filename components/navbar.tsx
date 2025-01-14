@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
-import { BicepsFlexed, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,9 +40,9 @@ export function Navbar() {
         size={"lg"}
         asChild
       >
-        <Link href={authToken ? getRedirectPath(userRole) : "/"}>
-          <BicepsFlexed />
-          Go Gym
+        <Link href={authToken ? getRedirectPath(userRole) : "/"} className="">
+         {/* eslint-disable-next-line @next/next/no-img-element */}
+         <img src="/logo.svg"  className="w-24 h-24"alt="" />
         </Link>
       </Button>
       {authToken != null ? (
