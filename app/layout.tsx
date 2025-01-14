@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import React from "react";
 import ReactQueryProvider from "@/utils/react-query-provider";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Go Gym",
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <ReactQueryProvider>
-        <body className={`${inter.className} antialiased`}>
+        <body className={`${inter.className} antialiased `}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -32,7 +33,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />  
+            <div className="min-h-[calc(100vh-15rem)]">
             {children}
+            </div>
+            <Footer />
             <Toaster richColors/>
           </ThemeProvider>
         </body>
