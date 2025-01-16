@@ -7,6 +7,7 @@ import Loader from "../loader";
 import { getCookie } from "cookies-next";
 import { Calendar, DollarSign, Notebook, Timer } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -32,14 +33,13 @@ function GymCard() {
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       {isLoading && <Loader />}
-      {!isLoading && error && (
-        <ErrorDiv error={"User does not have a gym"} statusCode={404} />
-      )}
+      {!isLoading && error && <div>Right now you are not in a gym.</div>}
       {data?.name == "" && !isLoading && !error && (
         <ErrorDiv error={"User does not have a gym"} statusCode={404} />
       )}
       {data && (
         <>
+          <h1 className="text-xl font-semibold">Gym:</h1>
           {data?.name != "" && (
             <div className="flex flex-col items-center justify-center gap-2 my-4 border border-muted rounded-md p-2">
               <div className="flex flex-col md:flex-row gap-2 items-center justify-center ">
@@ -79,6 +79,9 @@ function GymCard() {
                     </div>
                   </div>
                 </div>
+                <Button asChild>
+                  <Link href={"/user/check-in"}>Check In</Link>
+                </Button>
               </div>
               <div className="flex flex-row items-start justify-center flex-wrap gap-2 border p-2 border-muted rounded-md">
                 {data.plans && (

@@ -8,14 +8,10 @@ export default function Page() {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col justify-center items-center gap-2 p-2 mt-4">
-        <h1 className="font-bold text-2xl">User routes:</h1>
+        <h1 className="font-bold text-2xl">User:</h1>
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-xl font-semibold">Gym:</h1>
           <div className="flex flex-col items-center justify-center flex-wrap gap-4 p-2">
             <GymCard />
-            <Button asChild>
-              <Link href={"/user/check-in"}>Check In</Link>
-            </Button>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">

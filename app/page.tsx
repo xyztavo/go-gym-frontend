@@ -45,18 +45,18 @@ export default function Page() {
               src="/strongGopher.png"
               alt="Gym Logo"
             />
-            <div className="flex flex-col items-center justify-center gap-4 lg:gap-2 border rounded-md border-muted lg:p-0 lg:bg-transparent bg-background  lg:m-0 p-2 m-4 lg:border-none">
+            <div className="flex flex-col items-center justify-center gap-8 lg:gap-2 border-muted lg:p-0 lg:bg-transparent  lg:m-0 p-2 m-4 lg:border-none">
               <h1
                 className={
                   rubik_mono_one.className +
-                  " lg:text-3xl text-lg text-start lg:text-center  lg:border-none border-b border-muted"
+                  " lg:text-3xl text-lg text-center lg:text-center  lg:border-none border-b border-muted"
                 }
               >
                 Get Fit. Feel Great. Go Strong with Go Gym!
               </h1>
               <p
                 className={
-                  rubik_mono_one.className + " text-start  lg:text-center"
+                  rubik_mono_one.className + " text-center  lg:text-center"
                 }
               >
                 Lift like a beast, look like a masterpiece
@@ -67,15 +67,15 @@ export default function Page() {
         <div className="flex-col  lg:flex">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
             <path
-              fill="#5000ca"
-              fillOpacity="0.2"
+              fill="#00add8"
+              fillOpacity="0.7"
               d="M0,128L60,128C120,128,240,128,360,154.7C480,181,600,235,720,218.7C840,203,960,117,1080,85.3C1200,53,1320,75,1380,85.3L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
             ></path>
           </svg>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
             <path
-              fill="#5000ca"
-              fillOpacity="0.2"
+              fill="#00add8"
+              fillOpacity="0.7"
               d="M0,128L60,128C120,128,240,128,360,154.7C480,181,600,235,720,218.7C840,203,960,117,1080,85.3C1200,53,1320,75,1380,85.3L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
             ></path>
           </svg>

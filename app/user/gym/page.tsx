@@ -164,7 +164,7 @@ export default function Page() {
               </div>
             </div>
           ) : (
-            <ErrorDiv error="User does not have a gym" statusCode={404} />
+            <ErrorDiv error="User does not have a fds" statusCode={404} />
           )}
         </>
       )}
