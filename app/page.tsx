@@ -1,6 +1,8 @@
 "use client";
 import { motion, Variants } from "framer-motion";
 import { rubik_mono_one, jetBrains_Mono } from "./fonts";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page() {
   const introPictureVariants: Variants = {
@@ -61,7 +63,13 @@ export default function Page() {
               >
                 Lift like a beast, look like a masterpiece
               </p>
+              <Button variant={"link"} className="font-bold text-primary lg:text-white text-lg hover:bg-background transition-colors duration-700" asChild>
+                <Link href={"/register"}>
+                Register for free!
+                </Link>
+              </Button>
             </div>
+             
           </div>
         </div>
         <div className="flex-col  lg:flex">
@@ -81,13 +89,17 @@ export default function Page() {
           </svg>
         </div>
       </motion.div>
+
       <div className="flex flex-col items-center justify-center gap-2">
         <motion.h1
-         initial="hide"
-         whileInView="show"
-         exit="hide"
-         variants={introPictureVariants}
-        className={rubik_mono_one.className + " text-2xl"}>How it works</motion.h1>
+          initial="hide"
+          whileInView="show"
+          exit="hide"
+          variants={introPictureVariants}
+          className={rubik_mono_one.className + " text-2xl"}
+        >
+          How it works
+        </motion.h1>
         <div className="flex flex-col lg:flex-row justify-between items-center gap-10 m-4">
           <motion.div
             initial="hide"
