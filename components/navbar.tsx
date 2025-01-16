@@ -11,6 +11,15 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { CookieValueTypes, deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 
@@ -33,20 +42,22 @@ export function Navbar() {
   };
 
   return (
-    <div className="flex justify-between items-center border-b border-muted p-2">
+    <div className="flex justify-between items-center border-b border-muted p-1">
       <Button
         className="font-bold text-xl gap-4"
-        variant={"outline"}
+        variant={"ghost"}
         size={"lg"}
         asChild
       >
         <Link href={authToken ? getRedirectPath(userRole) : "/"} className="">
-         {/* eslint-disable-next-line @next/next/no-img-element */}
-         <img src="/logo.svg"  className="w-24 h-24"alt="" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" className="w-32" alt="" />
         </Link>
       </Button>
+      {/* if user auth: */}
       {authToken != null ? (
         <div>
+          {/* if user desktop auth: */}
           <div className="hidden md:flex flex-row justify-center items-center gap-4">
             <Button
               onClick={() => {
@@ -60,39 +71,43 @@ export function Navbar() {
             </Button>
             <ModeToggle />
           </div>
+
+          {/* if user mobile auth: */}
           <div className="md:hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <Sheet>
+              <SheetTrigger asChild>
                 <Button size={"icon"} variant={"secondary"}>
                   <Menu />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="flex flex-col gap-2">
-                  <DropdownMenuItem asChild>
-                    <Button
-                      onClick={() => {
-                        deleteCookie("auth");
-                        deleteCookie("role"); // Clear role cookie as well
-                        router.push("/");
-                        router.refresh();
-                      }}
-                    >
-                      Log out
-                    </Button>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <ModeToggle />
-                  </DropdownMenuItem>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </SheetTrigger>
+              <SheetContent className="border-muted bg-background">
+                <SheetHeader>
+                  <SheetTitle>User route:</SheetTitle>
+                  <SheetDescription className="flex flex-col gap-2 items-center justify-center">
+                    <div className="flex flex-row gap-2 items-center justify-center">
+                      <SheetClose asChild>
+                        <Button
+                          onClick={() => {
+                            deleteCookie("auth");
+                            deleteCookie("role"); // Clear role cookie as well
+                            router.push("/");
+                            router.refresh();
+                          }}
+                        >
+                          Log out
+                        </Button>
+                      </SheetClose>
+                      <ModeToggle />
+                    </div>
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       ) : (
         <div>
+          {/* if user not auth: */}
           <div className="md:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

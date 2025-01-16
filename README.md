@@ -38,6 +38,6 @@ instructions in [go-gym](https://github.com/xyztavo/go-gym) github repo
 bun dev
 ```
 ## Todo
-- [ ] ui looks like absolute shit and inconsistent [80% done]
-- [ ] some hydration errors that will prob never be fixed, its already supressed in prod.
+- [ ] ui looks like absolute shit and inconsistent [50% done]
+some hydration errors will prob never be fixed, its already supressed in prod. its related to external modules.
 
