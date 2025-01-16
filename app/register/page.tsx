@@ -30,9 +30,23 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Email is not valid.",
   }),
-  password: z.string().min(5, {
-    message: "password must have at least 5 characters.",
-  }),
+  password: z.string()
+    .min(8, {
+      message: "Password must have at least 8 characters.",
+    })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one capitalized letter.",
+    })
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+      message: "Password must contain at least one special character.",
+    }),
+  confirmPassword: z.string()
+    .min(8, {
+      message: "Please confirm your password.",
+    }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords must match.",
+  path: ["confirmPassword"], // Specify the path for the issue
 });
 
 export default function ProfileForm() {
@@ -92,7 +106,7 @@ export default function ProfileForm() {
   if (authToken) return <div>Already logged in.</div>;
 
   return (
-    <div className="flex flex-col justify-center items-center my-4">
+    <div className="flex flex-col justify-center items-center my-4 p-2">
       <h1 className="text-xl font-bold">Create your account:</h1>
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
@@ -132,9 +146,27 @@ export default function ProfileForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} />
                   </FormControl>
                   <FormDescription>Pick a strong password</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="confirm password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Confirm your password</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

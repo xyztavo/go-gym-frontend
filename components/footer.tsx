@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 
 const Footer: React.FC = () => {
   return (
-    <div className="flex flex-row gap-4 p-2 border-t border-muted items-center justify-center ">
+    <div className="flex flex-row gap-4 p-2 border-t border-muted items-center justify-center">
       <Button className="bg-background" variant={"link"} asChild>
         <a
           href="https://github.com/xyztavo"
