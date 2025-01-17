@@ -22,11 +22,21 @@ import {
 } from "@/components/ui/sheet";
 import { CookieValueTypes, deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { verifyToken } from "@/utils/auth";
+import { useEffect } from "react";
 
 export function Navbar() {
   const authToken = getCookie("auth");
   const userRole = getCookie("role"); // Assuming the role is stored in a cookie named "role"
   const router = useRouter();
+
+  // Verify token on component mount
+  useEffect(() => {
+    if (authToken && !verifyToken()) {
+      router.push("/login");
+      router.refresh();
+    }
+  }, [authToken, router]);
 
   const getRedirectPath = (role: CookieValueTypes) => {
     switch (role) {
