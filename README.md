@@ -18,12 +18,10 @@ Go-Gym is a gym management app where gym admins can create gyms, manage plans, e
 - **Tailwind CSS / Shadcn UI** (styling)
 - **React Query** (data fetching)
 - **Zod** (validation)
-## Screen shots:
-<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/landing-page-ss.png" alt="Gym Logo" width="600"/>
-<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss1.png" alt="Gym Logo" width="300"/>
-<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss2.png" alt="Gym Logo" width="300"/>
-<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/assets/ss3.png" alt="Gym Logo" width="600"/>
 
+## Screen shots:
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/public/screenshots/desktop.png" alt="desktop" width="600"/>
+<img src="https://raw.githubusercontent.com/xyztavo/go-gym-frontend/refs/heads/main/public/screenshots/mobile.png" alt="mobile" width="300"/>
 
 ## Usage
 - change [env](https://github.com/xyztavo/go-gym-frontend/blob/main/.env) to .env.local

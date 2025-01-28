@@ -1,11 +1,11 @@
 {
-  "name": "Go Gym",
-  "short_name": "Go Gym",
-  "description": "Gym management app for admins and users",
+  "name": "UGoGym",
+  "short_name": "UGoGym",
+  "description": "User and gym management app",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#00add8",
+  "background_color": "#383838",
+  "theme_color": "#383838",
   "orientation": "portrait",
   "icons": [
     {
