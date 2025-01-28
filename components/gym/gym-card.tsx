@@ -79,10 +79,10 @@ function GymCard() {
                     </div>
                   </div>
                 </div>
-                <Button asChild>
-                  <Link href={"/user/check-in"}>Check In</Link>
-                </Button>
               </div>
+              <Button asChild>
+                <Link href={"/user/check-in"}>Check In</Link>
+              </Button>
               <div className="flex flex-row items-start justify-center flex-wrap gap-2 border p-2 border-muted rounded-md">
                 {data.plans && (
                   <div className="flex flex-col gap-4 items-center justify-center p-2  py-4">

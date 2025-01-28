@@ -68,11 +68,11 @@ export function Navbar() {
       {authToken != null ? (
         <div>
           {/* if user desktop auth: */}
-          <div className="hidden md:flex flex-row justify-center items-center gap-4">
+          <div className="hidden lg:flex flex-row justify-center items-center gap-4">
             <Button
               onClick={() => {
                 deleteCookie("auth");
-                deleteCookie("role"); // Clear role cookie as well
+                deleteCookie("role");
                 router.push("/");
                 router.refresh();
               }}
@@ -83,7 +83,7 @@ export function Navbar() {
           </div>
 
           {/* if user mobile auth: */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Button size={"icon"} variant={"secondary"}>
@@ -118,7 +118,7 @@ export function Navbar() {
       ) : (
         <div>
           {/* if user not auth: */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button size={"icon"} variant={"secondary"}>

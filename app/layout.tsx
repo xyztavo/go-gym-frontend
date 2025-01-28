@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Inter } from "next/font/google";
@@ -8,10 +8,27 @@ import React from "react";
 import ReactQueryProvider from "@/utils/react-query-provider";
 import Footer from "@/components/footer";
 
-export const metadata: Metadata = {
-  title: "Go Gym",
-  description: "This a next frontend for my go gym backend app",
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#383838",
 };
+
+export const metadata: Metadata = {
+  title: "UGoGym",
+  description: "User and gym management app",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "UGoGym"
+  },
+  formatDetection: {
+    telephone: false
+  }
+};
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
