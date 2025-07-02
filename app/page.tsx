@@ -39,8 +39,8 @@ export default function Page() {
         exit="hide"
         variants={introPictureVariants}
       >
-        <div className="flex lg:absolute mt-0 lg:mt-44">
-          <div className="flex flex-col lg:flex-row items-center justify-center">
+        <div className="flex justify-center lg:w-[90%] lg:absolute mt-0 lg:mt-44">
+          <div className="flex flex-col lg:flex-row items-center justify-center w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="w-56 lg:w-96"
@@ -63,7 +63,7 @@ export default function Page() {
               >
                 Lift like a beast, look like a masterpiece
               </p>
-              <Button variant={"link"} className="font-bold text-primary lg:text-white text-lg hover:bg-background transition-colors duration-700" asChild>
+              <Button variant={"default"} className="font-bold  text-lg transition-colors duration-700" asChild>
                 <Link href={"/register"}>
                 Register for free!
                 </Link>
@@ -72,7 +72,7 @@ export default function Page() {
              
           </div>
         </div>
-        <div className="flex-col  lg:flex">
+        <div className="md:invisible flex-col  lg:flex">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
             <path
               fill="#00add8"
