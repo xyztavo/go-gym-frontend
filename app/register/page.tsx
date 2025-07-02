@@ -107,7 +107,7 @@ export default function ProfileForm() {
 
   return (
     <div className="flex flex-col justify-center items-center my-4 p-2">
-      <h1 className="text-xl font-bold">Create your account:</h1>
+      <h1 className="text-xl font-bold mb-4">Create your account:</h1>
       <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">

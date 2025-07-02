@@ -90,8 +90,8 @@ export default function ProfileForm() {
 
   return (
     <div className="flex flex-col justify-center items-center my-4">
-      <h1 className="text-xl font-bold">Log in to your account:</h1>
-      <div className="lg:border lg:p-2 rounded-md lg:border-muted lg:w-96">
+      <img src="logo.svg" className="w-64 lg:w-80 my-10" alt="" />
+      <div className="lg:p-2 rounded-md lg:border-muted lg:w-96 h-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-8">
             <FormField
@@ -125,9 +125,9 @@ export default function ProfileForm() {
             <Button
               type="submit"
               disabled={isPending}
-              className="flex flex-row items-center justify-center"
+              className="w-full"
             >
-              {isPending && <Loader2Icon className="animate-spin" />}Submit
+              {isPending && <Loader2Icon className="animate-spin" />}Log In
             </Button>
           </form>
         </Form>
